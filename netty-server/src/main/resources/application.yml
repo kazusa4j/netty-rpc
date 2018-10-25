@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: rpc-server
+
+# web port
+server:
+  port: 8000
+
+# 是否打开swagger
+swagger:
+  enable: true
+
+wlb:
+  rpc:
+    server:
+      port: 11211
+
+logging:
+  level:
+    root: info
+

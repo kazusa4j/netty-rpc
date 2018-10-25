@@ -1,0 +1,19 @@
+
+spring:
+  application:
+    name: rpc-producer
+server:
+  port: 8003
+swagger:
+  enable: true
+netty:
+  server:
+    port: 11211
+logging:
+  level: info
+
+wlb:
+  rpc:
+    enable: true
+    serviceName: producer
+

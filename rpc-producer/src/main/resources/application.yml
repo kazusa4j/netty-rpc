@@ -1,0 +1,27 @@
+
+spring:
+  application:
+    name: rpc-producer
+server:
+  port: 8001
+swagger:
+  enable: true
+netty:
+  server:
+    port: 11211
+logging:
+  level: info
+
+wlb:
+  rpc:
+    enable: true
+    client:
+      servicename: producer
+      aways-retry: true
+      aways-retry-interval: 60
+      init-retry-time: 5
+
+    server:
+      ip: 127.0.0.1
+      port: 11211
+
