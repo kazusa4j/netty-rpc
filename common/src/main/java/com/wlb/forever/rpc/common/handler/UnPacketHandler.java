@@ -22,8 +22,9 @@ public class UnPacketHandler extends LengthFieldBasedFrameDecoder {
 
     @Override
     protected Object decode(ChannelHandlerContext ctx, ByteBuf in) throws Exception {
-        if (in.getInt(in.readerIndex()) != PacketCodec.MAGIC_NUMBER) {
-            log.info("请求协议不匹配!");
+        if (in.getInt(0) != PacketCodec.MAGIC_NUMBER) {
+
+            log.info("请求包与协议不匹配!");
             //ctx.channel().close();
             return null;
         }

@@ -4,6 +4,7 @@ import com.wlb.forever.rpc.client.business.entity.User;
 import com.wlb.forever.rpc.client.business.service.RpcTestService;
 import com.wlb.forever.rpc.common.entity.JsonResult;
 import com.wlb.forever.rpc.common.utils.SpringContextUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/rpc")
+@Slf4j
 public class TestRpcController {
     @Autowired
     private RpcTestService rpcTestService;
@@ -28,7 +30,7 @@ public class TestRpcController {
             jr.setResult(user);
             return ResponseEntity.ok(jr);
         }catch (Exception e){
-            e.printStackTrace();
+            //e.printStackTrace();
             jr.setStatus(-1);
             jr.setDesc("出现异常");
             return ResponseEntity.ok(jr);

@@ -31,14 +31,7 @@ public class ServerServiceRequestHandler extends SimpleChannelInboundHandler<Ser
 
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, ServerServiceRequestPacket serverServiceRequestPacket) throws Exception {
-        String requestId=serverServiceRequestPacket.getRequestId();
-        String fromServiceId=serverServiceRequestPacket.getFromServiceId();
-        String fromServiceName=serverServiceRequestPacket.getFromServiceName();
-        String beanName = serverServiceRequestPacket.getBeanName();
-        String methodName = serverServiceRequestPacket.getMethodName();
-        Class[] classzz = serverServiceRequestPacket.getParamTypes();
-        Object[] params = serverServiceRequestPacket.getParams();
-        MessageSendExecutor messageSendExecutor=MessageSendExecutorLoader.messageSendExecutor;
-        messageSendExecutor.send(requestId,fromServiceId,fromServiceName,beanName,methodName,classzz,params,channelHandlerContext);
+        MessageSendExecutor messageSendExecutor = MessageSendExecutorLoader.messageSendExecutor;
+        messageSendExecutor.send(serverServiceRequestPacket, channelHandlerContext);
     }
 }

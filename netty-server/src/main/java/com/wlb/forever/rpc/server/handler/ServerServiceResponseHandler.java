@@ -2,6 +2,8 @@ package com.wlb.forever.rpc.server.handler;
 
 import com.wlb.forever.rpc.common.protocol.response.ClientServiceResponsePacket;
 import com.wlb.forever.rpc.common.protocol.response.ServerServiceResponsePacket;
+import com.wlb.forever.rpc.server.executor.ExecutorLoader;
+import com.wlb.forever.rpc.server.executor.ServerResponseExecutor;
 import com.wlb.forever.rpc.server.utils.ServiceUtil;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
@@ -26,14 +28,8 @@ public class ServerServiceResponseHandler extends SimpleChannelInboundHandler<Se
 
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, ServerServiceResponsePacket serverServiceResponsePacket) throws Exception {
-        ClientServiceResponsePacket clientServiceResponsePacket = new ClientServiceResponsePacket();
-        clientServiceResponsePacket.setRequestId(serverServiceResponsePacket.getRequestId());
-        clientServiceResponsePacket.setCode(serverServiceResponsePacket.getCode());
-        clientServiceResponsePacket.setDesc(serverServiceResponsePacket.getDesc());
-        clientServiceResponsePacket.setResult(serverServiceResponsePacket.getResult());
-        Channel channel = ServiceUtil.getChannel(serverServiceResponsePacket.getFromServiceId(), serverServiceResponsePacket.getFromServiceName());
-        if (channel != null && channel.isActive()) {
-            channel.writeAndFlush(clientServiceResponsePacket);
-        }
+        ServerResponseExecutor serverResponseExecutor = ExecutorLoader.SERVER_RESPONSE_EXECUTOR;
+        serverResponseExecutor.execute(channelHandlerContext, serverServiceResponsePacket);
     }
+
 }

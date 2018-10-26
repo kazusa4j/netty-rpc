@@ -1,18 +1,12 @@
 package com.wlb.forever.rpc.server.handler;
 
 import com.wlb.forever.rpc.common.protocol.request.ClientServiceRequestPacket;
-import com.wlb.forever.rpc.common.protocol.request.ServerServiceRequestPacket;
-import com.wlb.forever.rpc.common.protocol.response.ClientServiceResponsePacket;
-import com.wlb.forever.rpc.server.utils.ServiceUtil;
-import io.netty.channel.Channel;
+import com.wlb.forever.rpc.server.executor.ClientRequestExecutor;
+import com.wlb.forever.rpc.server.executor.ExecutorLoader;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.List;
-
-import static com.wlb.forever.rpc.common.constant.RpcResponseCode.NO_SERVICE;
 
 
 /**
@@ -32,27 +26,11 @@ public class ClientServiceRequestHandler extends SimpleChannelInboundHandler<Cli
 
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, ClientServiceRequestPacket clientServiceRequestPacket) throws Exception {
-        List<Channel> channels = ServiceUtil.getChannels(clientServiceRequestPacket.getToServiceName());
-        if (channels == null || channels.size() <= 0) {
-            log.warn("(" + clientServiceRequestPacket.getToServiceName() + ")RPC服务不存在");
-            ClientServiceResponsePacket clientServiceResponsePacket = new ClientServiceResponsePacket();
-            clientServiceResponsePacket.setRequestId(clientServiceRequestPacket.getRequestId());
-            clientServiceResponsePacket.setCode(NO_SERVICE);
-            clientServiceResponsePacket.setDesc("(" + clientServiceRequestPacket.getToServiceName() + ")RPC服务不存在");
-            clientServiceResponsePacket.setResult(null);
-            channelHandlerContext.writeAndFlush(clientServiceResponsePacket);
-        } else {
-            channels.forEach(channel -> {
-                ServerServiceRequestPacket serverServiceRequestPacket = new ServerServiceRequestPacket();
-                serverServiceRequestPacket.setFromServiceId(clientServiceRequestPacket.getFromServiceId());
-                serverServiceRequestPacket.setFromServiceName(clientServiceRequestPacket.getFromServiceName());
-                serverServiceRequestPacket.setRequestId(clientServiceRequestPacket.getRequestId());
-                serverServiceRequestPacket.setBeanName(clientServiceRequestPacket.getBeanName());
-                serverServiceRequestPacket.setMethodName(clientServiceRequestPacket.getMethodName());
-                serverServiceRequestPacket.setParamTypes(clientServiceRequestPacket.getParamTypes());
-                serverServiceRequestPacket.setParams(clientServiceRequestPacket.getParams());
-                channel.writeAndFlush(serverServiceRequestPacket);
-            });
+        ClientRequestExecutor clientRequestExecutor=ExecutorLoader.CLIENT_REQUEST_EXECUTOR;
+        if(clientRequestExecutor==null){
+
+        }else {
+            clientRequestExecutor.execute(channelHandlerContext,clientServiceRequestPacket);
         }
     }
 

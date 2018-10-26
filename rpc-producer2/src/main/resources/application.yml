@@ -10,10 +10,18 @@ netty:
   server:
     port: 11211
 logging:
-  level: info
+  level: error
 
 wlb:
   rpc:
     enable: true
-    serviceName: producer
+    client:
+      servicename: producer
+      aways-retry: true
+      aways-retry-interval: 60
+      init-retry-time: 5
+
+    server:
+      ip: 127.0.0.1
+      port: 11211
 

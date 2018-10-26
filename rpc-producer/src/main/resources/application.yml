@@ -10,7 +10,8 @@ netty:
   server:
     port: 11211
 logging:
-  level: info
+  level:
+    root: info
 
 wlb:
   rpc:

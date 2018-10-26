@@ -27,7 +27,7 @@ public class RpcJsonCaller extends AbstractRpcCaller {
         try {
             ClientServiceResponseHandler.messageMap.put(clientServiceRequestPacket.getRequestId(), this);
             RpcClient.channel.writeAndFlush(clientServiceRequestPacket);
-            log.info("发送RPC请求");
+            //log.info("发送RPC请求");
             lock.lock();
             await();
             if (this.response != null) {

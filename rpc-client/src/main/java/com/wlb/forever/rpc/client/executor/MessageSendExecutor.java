@@ -1,5 +1,6 @@
 package com.wlb.forever.rpc.client.executor;
 
+import com.wlb.forever.rpc.common.protocol.request.ServerServiceRequestPacket;
 import com.wlb.forever.rpc.common.protocol.response.ServerServiceResponsePacket;
 import com.wlb.forever.rpc.common.utils.SpringContextUtil;
 import io.netty.channel.ChannelHandlerContext;
@@ -25,23 +26,26 @@ public class MessageSendExecutor {
     @Autowired
     private ThreadPoolTaskExecutor threadPoolRpc;//变量名称为定义的线程池bean定义的name属性名。
 
+
     /**
      * 发送RPC服务请求结果
      *
-     * @param requestId
-     * @param fromServiceName
-     * @param beanName
-     * @param methodName
-     * @param classzz
-     * @param params
+     * @param serverServiceRequestPacket
      * @param channelHandlerContext
      */
     @Async(value = "threadPoolRpc")
-    public void send(String requestId, String fromServiceId, String fromServiceName, String beanName, String methodName, Class[] classzz, Object[] params, ChannelHandlerContext channelHandlerContext) {
+    public void send(ServerServiceRequestPacket serverServiceRequestPacket, ChannelHandlerContext channelHandlerContext) {
         //checkAvtiveThreadNum();
+        String requestId = serverServiceRequestPacket.getRequestId();
+        String fromServiceId = serverServiceRequestPacket.getFromServiceId();
+        String fromServiceName = serverServiceRequestPacket.getFromServiceName();
+        String beanName = serverServiceRequestPacket.getBeanName();
+        String methodName = serverServiceRequestPacket.getMethodName();
+        Class[] classzz = serverServiceRequestPacket.getParamTypes();
+        Object[] params = serverServiceRequestPacket.getParams();
         ServerServiceResponsePacket serverServiceResponsePacket = assemRpcResponsePacket(requestId, fromServiceId, fromServiceName, beanName, methodName, classzz, params);
         channelHandlerContext.writeAndFlush(serverServiceResponsePacket);
-        log.info("返回" + fromServiceName + "RPC调用服务结果");
+        log.info("返回{}RPC调用服务结果", fromServiceName);
     }
 
     /**
@@ -55,7 +59,7 @@ public class MessageSendExecutor {
      * @param params
      * @return
      */
-    public ServerServiceResponsePacket assemRpcResponsePacket(String requestId, String fromServiceId, String fromServiceName, String beanName, String methodName, Class[] classzz, Object[] params) {
+    private ServerServiceResponsePacket assemRpcResponsePacket(String requestId, String fromServiceId, String fromServiceName, String beanName, String methodName, Class[] classzz, Object[] params) {
         ServerServiceResponsePacket serverServiceResponsePacket = new ServerServiceResponsePacket();
         serverServiceResponsePacket.setFromServiceId(fromServiceId);
         serverServiceResponsePacket.setFromServiceName(fromServiceName);
@@ -92,6 +96,14 @@ public class MessageSendExecutor {
         return serverServiceResponsePacket;
     }
 
+    /**
+     * 设置RPC调用成功描述
+     *
+     * @param desc
+     * @param beanName
+     * @param methodName
+     * @param classzz
+     */
     private void setSuccessDesc(StringBuilder desc, String beanName, String methodName, Class[] classzz) {
         desc.append("RPC调用");
         desc.append(beanName);
@@ -170,7 +182,7 @@ public class MessageSendExecutor {
     /**
      * 检查活跃线程数
      */
-    public int checkAvtiveThreadNum() {
+    private int checkAvtiveThreadNum() {
         int num = threadPoolRpc.getActiveCount();
         log.info("线程数:" + num);
         return num;

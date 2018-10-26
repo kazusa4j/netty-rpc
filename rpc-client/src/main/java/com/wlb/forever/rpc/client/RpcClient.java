@@ -144,7 +144,7 @@ public class RpcClient {
                 RpcClient.channel = ((ChannelFuture) future).channel();
                 channel.writeAndFlush(new RegisterServerRequestPacket(SERVICE_ID, SERVICE_NAME));
             } else if (retry == 0) {
-                log.info(AWAYS_RETRY_INTERVAL+"秒后尝试重连RPC服务器");
+                log.info(AWAYS_RETRY_INTERVAL + "秒后尝试重连RPC服务器");
                 if (!AWAYS_RETRY) {
                     return;
                 }
