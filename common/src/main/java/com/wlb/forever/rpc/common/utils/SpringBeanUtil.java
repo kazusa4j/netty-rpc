@@ -19,44 +19,12 @@ import java.lang.reflect.Method;
 public class SpringBeanUtil implements ApplicationContextAware {
     private static ApplicationContext context;
 
-    public static Object getRpcBean(String name, String methodName, Class[] classzz) {
-        Object bean = getBean(name);
-        if (bean == null) {
-            String nameLower = name.toLowerCase();
-            String[] beans = context.getBeanDefinitionNames();
-            for (String beanName : beans) {
-                String nameTmp = beanName.toLowerCase();
-                if (nameTmp.indexOf(nameLower) > -1) {
-                    Method mh = ReflectionUtils.findMethod(getBean(beanName).getClass(), methodName, classzz);
-                    if (mh != null) {
-                        return getBean(beanName);
-                    }
-                }
-            }
-        }
-        return bean;
-    }
-
     public static Object getBean(String name) throws BeansException {
-        if (context.containsBean(name)) {
-            return context.getBean(name);
-        } else {
-            try {
-                context.getBean(Class.forName(name));
-            } catch (ClassNotFoundException e) {
-                log.error("获取bean(" + name + ")出现异常");
-            }
-        }
-        return null;
+        return context.getBean(name);
     }
 
-    public static <T> T getBean(Class<T> c) {
-        try {
-            return context.getBean(c);
-        } catch (Exception e) {
-            return null;
-        }
-
+    public static <T> T getBean(Class<T> c) throws BeansException {
+        return context.getBean(c);
     }
 
     public static String[] getBeansName(Class<?> c) {
@@ -79,6 +47,10 @@ public class SpringBeanUtil implements ApplicationContextAware {
             System.out.println("Bean所在的包：" + beanType.getPackage());
             System.out.println("Bean：" + context.getBean(beanName));
         }
+    }
+
+    public static String[] getBeanNames() throws BeansException {
+        return context.getBeanDefinitionNames();
     }
 
     @Override

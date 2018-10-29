@@ -65,13 +65,8 @@ public class MessageSendExecutor {
         producerServiceResponsePacket.setFromServiceId(fromServiceId);
         producerServiceResponsePacket.setFromServiceName(fromServiceName);
         producerServiceResponsePacket.setRequestId(requestId);
-        Object bean;
-        if (!RpcBeanUtil.hasBean(beanName)) {
-            bean = SpringBeanUtil.getRpcBean(beanName, methodName, classzz);
-            RpcBeanUtil.putBean(beanName, bean);
-        } else {
-            bean = RpcBeanUtil.getBean(beanName);
-        }
+        Object bean = RpcBeanUtil.getRpcBean(beanName, methodName, classzz);
+
         StringBuilder desc = new StringBuilder();
         Integer code = SUCCESS;
         if (bean != null) {
