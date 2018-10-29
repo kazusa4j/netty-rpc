@@ -56,8 +56,6 @@ public class RpcServer {
                         ch.pipeline().addLast(ServerServiceResponseHandler.INSTANCE);
                     }
                 });
-
-
         bind(serverBootstrap, nettyPort);
     }
 

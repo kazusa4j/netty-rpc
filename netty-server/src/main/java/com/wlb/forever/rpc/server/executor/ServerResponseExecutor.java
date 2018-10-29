@@ -19,12 +19,12 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Slf4j
-public class ServerResponseExecutor {
+public class ServerResponseExecutor{
     @Autowired
     private ThreadPoolTaskExecutor threadPoolServerResponse;//变量名称为定义的线程池bean定义的name属性名。
 
     @Async(value = "threadPoolServerResponse")
-    public void execute(ChannelHandlerContext ch, Packet packet) {
+    public void executeTask(ChannelHandlerContext ch, Packet packet) {
         ServerServiceResponsePacket serverServiceResponsePacket = (ServerServiceResponsePacket) packet;
         ClientServiceResponsePacket clientServiceResponsePacket = new ClientServiceResponsePacket();
         clientServiceResponsePacket.setRequestId(serverServiceResponsePacket.getRequestId());

@@ -2,6 +2,7 @@ package com.wlb.forever.rpc.client.business.service.impl;
 
 import com.wlb.forever.rpc.client.business.entity.User;
 import com.wlb.forever.rpc.client.business.service.UserService;
+import com.wlb.forever.rpc.common.utils.SpringBeanUtil;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -24,4 +25,11 @@ public class UserServiceImpl implements UserService {
         userid++;
         return user;
     }
+
+    @Override
+    public void getBeans() {
+        SpringBeanUtil.printAllBeans();
+    }
+
+
 }

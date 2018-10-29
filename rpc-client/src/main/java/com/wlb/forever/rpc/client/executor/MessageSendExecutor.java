@@ -1,8 +1,9 @@
 package com.wlb.forever.rpc.client.executor;
 
+import com.wlb.forever.rpc.client.utils.RpcBeanUtil;
 import com.wlb.forever.rpc.common.protocol.request.ServerServiceRequestPacket;
 import com.wlb.forever.rpc.common.protocol.response.ServerServiceResponsePacket;
-import com.wlb.forever.rpc.common.utils.SpringContextUtil;
+import com.wlb.forever.rpc.common.utils.SpringBeanUtil;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,7 +65,13 @@ public class MessageSendExecutor {
         serverServiceResponsePacket.setFromServiceId(fromServiceId);
         serverServiceResponsePacket.setFromServiceName(fromServiceName);
         serverServiceResponsePacket.setRequestId(requestId);
-        Object bean = SpringContextUtil.getBean(beanName);
+        Object bean;
+        if (!RpcBeanUtil.hasBean(beanName)) {
+            bean = SpringBeanUtil.getRpcBean(beanName, methodName, classzz);
+            RpcBeanUtil.putBean(beanName, bean);
+        } else {
+            bean = RpcBeanUtil.getBean(beanName);
+        }
         StringBuilder desc = new StringBuilder();
         Integer code = SUCCESS;
         if (bean != null) {

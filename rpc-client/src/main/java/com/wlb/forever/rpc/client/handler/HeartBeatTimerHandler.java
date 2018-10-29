@@ -2,7 +2,6 @@ package com.wlb.forever.rpc.client.handler;
 
 import com.wlb.forever.rpc.client.RpcClient;
 import com.wlb.forever.rpc.common.protocol.request.HeartBeatRequestPacket;
-import com.wlb.forever.rpc.common.utils.SpringContextUtil;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import lombok.extern.slf4j.Slf4j;

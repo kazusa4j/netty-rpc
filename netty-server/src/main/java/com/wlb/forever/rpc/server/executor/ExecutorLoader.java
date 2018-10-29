@@ -1,6 +1,6 @@
 package com.wlb.forever.rpc.server.executor;
 
-import com.wlb.forever.rpc.common.utils.SpringContextUtil;
+import com.wlb.forever.rpc.common.utils.SpringBeanUtil;
 
 /**
  * @Auther: william
@@ -8,6 +8,6 @@ import com.wlb.forever.rpc.common.utils.SpringContextUtil;
  * @Description:
  */
 public interface ExecutorLoader {
-    ClientRequestExecutor CLIENT_REQUEST_EXECUTOR = SpringContextUtil.getBean(ClientRequestExecutor.class);
-    ServerResponseExecutor SERVER_RESPONSE_EXECUTOR = SpringContextUtil.getBean(ServerResponseExecutor.class);
+    ClientRequestExecutor CLIENT_REQUEST_EXECUTOR = (ClientRequestExecutor) SpringBeanUtil.getBean(ClientRequestExecutor.class);
+    ServerResponseExecutor SERVER_RESPONSE_EXECUTOR = (ServerResponseExecutor) SpringBeanUtil.getBean(ServerResponseExecutor.class);
 }

@@ -1,6 +1,6 @@
 package com.wlb.forever.rpc.client.executor;
 
-import com.wlb.forever.rpc.common.utils.SpringContextUtil;
+import com.wlb.forever.rpc.common.utils.SpringBeanUtil;
 
 /**
  * @Auther: william
@@ -8,5 +8,5 @@ import com.wlb.forever.rpc.common.utils.SpringContextUtil;
  * @Description:
  */
 public interface MessageSendExecutorLoader {
-    MessageSendExecutor messageSendExecutor =SpringContextUtil.getBean(MessageSendExecutor.class);
+    MessageSendExecutor messageSendExecutor = SpringBeanUtil.getBean(MessageSendExecutor.class);
 }

@@ -65,12 +65,18 @@ public class RpcClientsRegistrar implements ImportBeanDefinitionRegistrar,
         log.info("=====================");
         log.info("开始初始化rpcclientbean");
         log.info("=====================");
-        registerFeignClients(annotationMetadata, beanDefinitionRegistry);
+        registerRpcClients(annotationMetadata, beanDefinitionRegistry);
     }
 
 
-    public void registerFeignClients(AnnotationMetadata metadata,
-                                     BeanDefinitionRegistry registry) {
+    /**
+     * 注册RPC客户端请求beans
+     *
+     * @param metadata
+     * @param registry
+     */
+    public void registerRpcClients(AnnotationMetadata metadata,
+                                   BeanDefinitionRegistry registry) {
         ClassPathScanningCandidateComponentProvider scanner = getScanner();
         scanner.setResourceLoader(this.resourceLoader);
 
@@ -89,16 +95,32 @@ public class RpcClientsRegistrar implements ImportBeanDefinitionRegistrar,
                     AnnotationMetadata annotationMetadata = beanDefinition.getMetadata();
                     Assert.isTrue(annotationMetadata.isInterface(), "@RpcClient 注解只能作用于接口");
                     Map<String, Object> attributes = annotationMetadata.getAnnotationAttributes(RpcClient.class.getCanonicalName());
-                    registerFeignClient(registry, annotationMetadata, attributes);
+                    registerRpcClient(registry, annotationMetadata, attributes);
                 }
             }
         }
     }
 
-    private void registerFeignClient(BeanDefinitionRegistry registry, AnnotationMetadata annotationMetadata, Map<String, Object> attributes) {
+    /**
+     * 注册RPC客户端请求bean
+     *
+     * @param registry
+     * @param annotationMetadata
+     * @param attributes
+     */
+    private void registerRpcClient(BeanDefinitionRegistry registry, AnnotationMetadata annotationMetadata, Map<String, Object> attributes) {
         String className = annotationMetadata.getClassName();
         String serviceName = getAttrValue("serviceName", attributes);
         String beanName = getAttrValue("beanName", attributes);
+        if (beanName == null || "".equals(beanName)) {
+            try {
+                beanName = Class.forName(className).getSimpleName();
+            } catch (ClassNotFoundException e) {
+                log.error("类{}不存在", className);
+                return;
+            }
+            log.error("客户端注册BEANNAME{}", beanName);
+        }
         try {
             addRpcClient(serviceName, beanName, Class.forName(className));
         } catch (ClassNotFoundException e) {
@@ -117,7 +139,7 @@ public class RpcClientsRegistrar implements ImportBeanDefinitionRegistrar,
 
         BeanDefinitionHolder holder = new BeanDefinitionHolder(beanDefinition, className, new String[]{alias});
         BeanDefinitionReaderUtils.registerBeanDefinition(holder, registry);
-        log.info("创建bean(" + className + ")成功,"+"别名"+alias);
+        log.info("创建bean(" + className + ")成功," + "别名" + alias);
     }
 
     private <T> void addRpcClient(String serviceName, String beanName, Class<T> type) {
@@ -175,8 +197,8 @@ public class RpcClientsRegistrar implements ImportBeanDefinitionRegistrar,
         if (StringUtils.hasText(value)) {
             return value;
         }
-
-        throw new IllegalStateException("'" + key + "'必须设置  @" + RpcClient.class.getSimpleName());
+        return null;
+        //throw new IllegalStateException("'" + key + "'必须设置  @" + RpcClient.class.getSimpleName());
     }
 
     private String getClientName(Map<String, Object> client) {
@@ -196,6 +218,7 @@ public class RpcClientsRegistrar implements ImportBeanDefinitionRegistrar,
         }
         return value;
     }
+
 
     private String resolve(String value) {
         if (StringUtils.hasText(value)) {

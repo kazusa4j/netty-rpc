@@ -29,7 +29,7 @@ public class ServerServiceResponseHandler extends SimpleChannelInboundHandler<Se
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, ServerServiceResponsePacket serverServiceResponsePacket) throws Exception {
         ServerResponseExecutor serverResponseExecutor = ExecutorLoader.SERVER_RESPONSE_EXECUTOR;
-        serverResponseExecutor.execute(channelHandlerContext, serverServiceResponsePacket);
+        serverResponseExecutor.executeTask(channelHandlerContext, serverServiceResponsePacket);
     }
 
 }

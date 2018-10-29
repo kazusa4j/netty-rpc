@@ -1,4 +1,4 @@
-package com.wlb.forever.rpc;
+package com.wlb.forever;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -33,7 +33,11 @@ public class RpcJsonCaller extends AbstractRpcCaller {
             if (this.response != null) {
                 Integer code = this.response.getCode();
                 if (code == 0) {
-                    return JSON.parseObject(this.response.getResult().toString(), clazz);
+                    if (this.response.getResult() != null) {
+                        return JSON.parseObject(this.response.getResult().toString(), clazz);
+                    } else {
+                        return null;
+                    }
                 } else {
                     throw new RpcCallClientException(this.response.getDesc());
                 }

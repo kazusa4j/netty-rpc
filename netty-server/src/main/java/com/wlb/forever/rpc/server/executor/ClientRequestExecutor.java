@@ -29,11 +29,11 @@ public class ClientRequestExecutor {
     private ThreadPoolTaskExecutor threadPoolClientRequest;//变量名称为定义的线程池bean定义的name属性名。
 
     @Async(value = "threadPoolClientRequest")
-    public void execute(ChannelHandlerContext ch, Packet packet) {
+    public void executeTask(ChannelHandlerContext ch, Packet packet) {
         ClientServiceRequestPacket clientServiceRequestPacket = (ClientServiceRequestPacket) packet;
         List<Channel> channels = ServiceUtil.getChannels(clientServiceRequestPacket.getToServiceName());
         if (channels == null || channels.size() <= 0) {
-            log.warn("(" + clientServiceRequestPacket.getToServiceName() + ")RPC服务不存在");
+            log.warn("RPC服务({})不存在", clientServiceRequestPacket.getToServiceName());
             ClientServiceResponsePacket clientServiceResponsePacket = new ClientServiceResponsePacket();
             clientServiceResponsePacket.setRequestId(clientServiceRequestPacket.getRequestId());
             clientServiceResponsePacket.setCode(NO_SERVICE);
