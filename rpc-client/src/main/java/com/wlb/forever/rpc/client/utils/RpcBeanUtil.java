@@ -60,7 +60,9 @@ public class RpcBeanUtil {
                         if (nameTmp.indexOf(nameLower) > -1) {
                             Method mh = ReflectionUtils.findMethod(SpringBeanUtil.getBean(beanName).getClass(), methodName, classzz);
                             if (mh != null) {
-                                return SpringBeanUtil.getBean(beanName);
+                                bean = SpringBeanUtil.getBean(beanName);
+                                putBean(name, bean);
+                                return bean;
                             }
                         }
                     }
