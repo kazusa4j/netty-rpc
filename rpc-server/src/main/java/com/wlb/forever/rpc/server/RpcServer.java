@@ -3,10 +3,7 @@ package com.wlb.forever.rpc.server;
 import com.wlb.forever.rpc.common.handler.PacketCodecHandler;
 import com.wlb.forever.rpc.common.handler.RPCIdleStateHandler;
 import com.wlb.forever.rpc.common.handler.UnPacketHandler;
-import com.wlb.forever.rpc.server.handler.ClientServiceRequestHandler;
-import com.wlb.forever.rpc.server.handler.HeartBeatRequestHandler;
-import com.wlb.forever.rpc.server.handler.RegisterRequestHandler;
-import com.wlb.forever.rpc.server.handler.ServerServiceResponseHandler;
+import com.wlb.forever.rpc.server.handler.*;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
@@ -57,10 +54,8 @@ public class RpcServer {
                         ch.pipeline().addLast(RegisterRequestHandler.INSTANCE);
                         //接收心跳
                         ch.pipeline().addLast(HeartBeatRequestHandler.INSTANCE);
-                        //接收RPC消费者请求消息
-                        ch.pipeline().addLast(ClientServiceRequestHandler.INSTANCE);
-                        //接收RPC服务生产者返回消息
-                        ch.pipeline().addLast(ServerServiceResponseHandler.INSTANCE);
+                        //RPC服务handler
+                        ch.pipeline().addLast(RPCServerHandler.INSTANCE);
                     }
                 });
         bind(serverBootstrap, nettyPort);

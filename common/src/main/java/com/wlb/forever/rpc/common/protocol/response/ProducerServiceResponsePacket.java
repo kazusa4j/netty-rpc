@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import static com.wlb.forever.rpc.common.protocol.command.Command.SERVER_SERVICE_RESPONSE;
+import static com.wlb.forever.rpc.common.protocol.command.Command.PRODUCER_SERVICE_RESPONSE;
 
 
 /**
@@ -26,6 +26,6 @@ public class ProducerServiceResponsePacket extends Packet {
 
     @Override
     public Byte getCommand() {
-        return SERVER_SERVICE_RESPONSE;
+        return PRODUCER_SERVICE_RESPONSE;
     }
 }

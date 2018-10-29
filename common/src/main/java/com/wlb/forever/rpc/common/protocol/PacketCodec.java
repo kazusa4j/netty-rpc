@@ -37,10 +37,10 @@ public class PacketCodec {
         packetTypeMap.put(REGISTER_SERVER_RESPONSE, RegisterServerResponsePacket.class);
         packetTypeMap.put(HEARTBEAT_REQUEST, HeartBeatRequestPacket.class);
         packetTypeMap.put(HEARTBEAT_RESPONSE, HeartBeatResponsePacket.class);
-        packetTypeMap.put(CLIENT_SERVICE_REQUEST, ConsumerServiceRequestPacket.class);
-        packetTypeMap.put(CLIENT_SERVICE_RESPONSE, ConsumerServiceResponsePacket.class);
-        packetTypeMap.put(SERVER_SERVICE_REQUEST, ProducerServiceRequestPacket.class);
-        packetTypeMap.put(SERVER_SERVICE_RESPONSE, ProducerServiceResponsePacket.class);
+        packetTypeMap.put(CONSUMER_SERVICE_REQUEST, ConsumerServiceRequestPacket.class);
+        packetTypeMap.put(CONSUMER_SERVICE_RESPONSE, ConsumerServiceResponsePacket.class);
+        packetTypeMap.put(PRODUCER_SERVICE_REQUEST, ProducerServiceRequestPacket.class);
+        packetTypeMap.put(PRODUCER_SERVICE_RESPONSE, ProducerServiceResponsePacket.class);
         serializerMap = new HashMap<>();
         Serializer serializer = new JSONSerializer();
         serializerMap.put(serializer.getSerializerAlgorithm(), serializer);

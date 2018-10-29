@@ -19,11 +19,11 @@ import static com.wlb.forever.rpc.common.constant.RpcResponseCode.SERVER_EXCEPTI
  */
 @Slf4j
 @ChannelHandler.Sharable
-public class ClientServiceRequestHandler extends SimpleChannelInboundHandler<ConsumerServiceRequestPacket> {
+public class ConsumerServiceRequestHandler extends SimpleChannelInboundHandler<ConsumerServiceRequestPacket> {
 
-    public static final ClientServiceRequestHandler INSTANCE = new ClientServiceRequestHandler();
+    public static final ConsumerServiceRequestHandler INSTANCE = new ConsumerServiceRequestHandler();
 
-    private ClientServiceRequestHandler() {
+    private ConsumerServiceRequestHandler() {
 
     }
 

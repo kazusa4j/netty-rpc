@@ -1,12 +1,11 @@
 package com.wlb.forever.rpc.common.protocol.request;
 
 import com.wlb.forever.rpc.common.protocol.Packet;
-import com.wlb.forever.rpc.common.utils.UniqueIdUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import static com.wlb.forever.rpc.common.protocol.command.Command.CLIENT_SERVICE_REQUEST;
+import static com.wlb.forever.rpc.common.protocol.command.Command.CONSUMER_SERVICE_REQUEST;
 
 
 /**
@@ -30,6 +29,6 @@ public class ConsumerServiceRequestPacket extends Packet {
 
     @Override
     public Byte getCommand() {
-        return CLIENT_SERVICE_REQUEST;
+        return CONSUMER_SERVICE_REQUEST;
     }
 }
