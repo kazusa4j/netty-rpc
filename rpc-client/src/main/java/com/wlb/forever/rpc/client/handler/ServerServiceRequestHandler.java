@@ -2,7 +2,7 @@ package com.wlb.forever.rpc.client.handler;
 
 import com.wlb.forever.rpc.client.executor.MessageSendExecutor;
 import com.wlb.forever.rpc.client.executor.MessageSendExecutorLoader;
-import com.wlb.forever.rpc.common.protocol.request.ServerServiceRequestPacket;
+import com.wlb.forever.rpc.common.protocol.request.ProducerServiceRequestPacket;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @ChannelHandler.Sharable
 @Slf4j
-public class ServerServiceRequestHandler extends SimpleChannelInboundHandler<ServerServiceRequestPacket> {
+public class ServerServiceRequestHandler extends SimpleChannelInboundHandler<ProducerServiceRequestPacket> {
     public static final ServerServiceRequestHandler INSTANCE = new ServerServiceRequestHandler();
 
     private ServerServiceRequestHandler() {
@@ -23,8 +23,8 @@ public class ServerServiceRequestHandler extends SimpleChannelInboundHandler<Ser
     }
 
     @Override
-    protected void channelRead0(ChannelHandlerContext channelHandlerContext, ServerServiceRequestPacket serverServiceRequestPacket) throws Exception {
+    protected void channelRead0(ChannelHandlerContext channelHandlerContext, ProducerServiceRequestPacket producerServiceRequestPacket) throws Exception {
         MessageSendExecutor messageSendExecutor = MessageSendExecutorLoader.messageSendExecutor;
-        messageSendExecutor.send(serverServiceRequestPacket, channelHandlerContext);
+        messageSendExecutor.send(producerServiceRequestPacket, channelHandlerContext);
     }
 }

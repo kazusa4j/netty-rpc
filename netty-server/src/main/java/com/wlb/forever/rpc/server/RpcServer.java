@@ -47,12 +47,19 @@ public class RpcServer {
                 .childOption(ChannelOption.TCP_NODELAY, true)
                 .childHandler(new ChannelInitializer<NioSocketChannel>() {
                     protected void initChannel(NioSocketChannel ch) {
+                        //心跳
                         ch.pipeline().addLast(new RPCIdleStateHandler());
+                        //拆包粘包验证协议
                         ch.pipeline().addLast(new UnPacketHandler());
+                        //编码解码
                         ch.pipeline().addLast(PacketCodecHandler.INSTANCE);
+                        //注册RPC服务生产者
                         ch.pipeline().addLast(RegisterRequestHandler.INSTANCE);
+                        //接收心跳
                         ch.pipeline().addLast(HeartBeatRequestHandler.INSTANCE);
+                        //接收RPC消费者请求消息
                         ch.pipeline().addLast(ClientServiceRequestHandler.INSTANCE);
+                        //接收RPC服务生产者返回消息
                         ch.pipeline().addLast(ServerServiceResponseHandler.INSTANCE);
                     }
                 });

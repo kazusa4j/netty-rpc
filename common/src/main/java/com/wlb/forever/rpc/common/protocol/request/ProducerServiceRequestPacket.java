@@ -17,7 +17,7 @@ import static com.wlb.forever.rpc.common.protocol.command.Command.SERVER_SERVICE
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ServerServiceRequestPacket extends Packet {
+public class ProducerServiceRequestPacket extends Packet {
     private String requestId;
     private String fromServiceId;
     private String fromServiceName;

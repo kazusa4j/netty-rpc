@@ -1,13 +1,13 @@
 package com.wlb.forever.rpc.common.protocol;
 
-import com.wlb.forever.rpc.common.protocol.request.ClientServiceRequestPacket;
+import com.wlb.forever.rpc.common.protocol.request.ConsumerServiceRequestPacket;
 import com.wlb.forever.rpc.common.protocol.request.HeartBeatRequestPacket;
 import com.wlb.forever.rpc.common.protocol.request.RegisterServerRequestPacket;
-import com.wlb.forever.rpc.common.protocol.request.ServerServiceRequestPacket;
-import com.wlb.forever.rpc.common.protocol.response.ClientServiceResponsePacket;
+import com.wlb.forever.rpc.common.protocol.request.ProducerServiceRequestPacket;
+import com.wlb.forever.rpc.common.protocol.response.ConsumerServiceResponsePacket;
 import com.wlb.forever.rpc.common.protocol.response.HeartBeatResponsePacket;
 import com.wlb.forever.rpc.common.protocol.response.RegisterServerResponsePacket;
-import com.wlb.forever.rpc.common.protocol.response.ServerServiceResponsePacket;
+import com.wlb.forever.rpc.common.protocol.response.ProducerServiceResponsePacket;
 import com.wlb.forever.rpc.common.serializer.Serializer;
 import com.wlb.forever.rpc.common.serializer.impl.JSONSerializer;
 import io.netty.buffer.ByteBuf;
@@ -37,10 +37,10 @@ public class PacketCodec {
         packetTypeMap.put(REGISTER_SERVER_RESPONSE, RegisterServerResponsePacket.class);
         packetTypeMap.put(HEARTBEAT_REQUEST, HeartBeatRequestPacket.class);
         packetTypeMap.put(HEARTBEAT_RESPONSE, HeartBeatResponsePacket.class);
-        packetTypeMap.put(CLIENT_SERVICE_REQUEST, ClientServiceRequestPacket.class);
-        packetTypeMap.put(CLIENT_SERVICE_RESPONSE, ClientServiceResponsePacket.class);
-        packetTypeMap.put(SERVER_SERVICE_REQUEST, ServerServiceRequestPacket.class);
-        packetTypeMap.put(SERVER_SERVICE_RESPONSE, ServerServiceResponsePacket.class);
+        packetTypeMap.put(CLIENT_SERVICE_REQUEST, ConsumerServiceRequestPacket.class);
+        packetTypeMap.put(CLIENT_SERVICE_RESPONSE, ConsumerServiceResponsePacket.class);
+        packetTypeMap.put(SERVER_SERVICE_REQUEST, ProducerServiceRequestPacket.class);
+        packetTypeMap.put(SERVER_SERVICE_RESPONSE, ProducerServiceResponsePacket.class);
         serializerMap = new HashMap<>();
         Serializer serializer = new JSONSerializer();
         serializerMap.put(serializer.getSerializerAlgorithm(), serializer);

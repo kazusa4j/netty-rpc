@@ -15,7 +15,7 @@ import static com.wlb.forever.rpc.common.protocol.command.Command.CLIENT_SERVICE
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class ClientServiceResponsePacket extends Packet {
+public class ConsumerServiceResponsePacket extends Packet {
     private String requestId;
     private Integer code = 0;
     private String desc = "";

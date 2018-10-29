@@ -17,7 +17,7 @@ import static com.wlb.forever.rpc.common.protocol.command.Command.CLIENT_SERVICE
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ClientServiceRequestPacket extends Packet {
+public class ConsumerServiceRequestPacket extends Packet {
 
     private String requestId;
     private String toServiceName;

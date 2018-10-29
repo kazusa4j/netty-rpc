@@ -1,8 +1,8 @@
 package com.wlb.forever.rpc.server.executor;
 
 import com.wlb.forever.rpc.common.protocol.Packet;
-import com.wlb.forever.rpc.common.protocol.response.ClientServiceResponsePacket;
-import com.wlb.forever.rpc.common.protocol.response.ServerServiceResponsePacket;
+import com.wlb.forever.rpc.common.protocol.response.ConsumerServiceResponsePacket;
+import com.wlb.forever.rpc.common.protocol.response.ProducerServiceResponsePacket;
 import com.wlb.forever.rpc.server.utils.ServiceUtil;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
@@ -25,15 +25,15 @@ public class ServerResponseExecutor{
 
     @Async(value = "threadPoolServerResponse")
     public void executeTask(ChannelHandlerContext ch, Packet packet) {
-        ServerServiceResponsePacket serverServiceResponsePacket = (ServerServiceResponsePacket) packet;
-        ClientServiceResponsePacket clientServiceResponsePacket = new ClientServiceResponsePacket();
-        clientServiceResponsePacket.setRequestId(serverServiceResponsePacket.getRequestId());
-        clientServiceResponsePacket.setCode(serverServiceResponsePacket.getCode());
-        clientServiceResponsePacket.setDesc(serverServiceResponsePacket.getDesc());
-        clientServiceResponsePacket.setResult(serverServiceResponsePacket.getResult());
-        Channel channel = ServiceUtil.getChannel(serverServiceResponsePacket.getFromServiceId(), serverServiceResponsePacket.getFromServiceName());
+        ProducerServiceResponsePacket producerServiceResponsePacket = (ProducerServiceResponsePacket) packet;
+        ConsumerServiceResponsePacket consumerServiceResponsePacket = new ConsumerServiceResponsePacket();
+        consumerServiceResponsePacket.setRequestId(producerServiceResponsePacket.getRequestId());
+        consumerServiceResponsePacket.setCode(producerServiceResponsePacket.getCode());
+        consumerServiceResponsePacket.setDesc(producerServiceResponsePacket.getDesc());
+        consumerServiceResponsePacket.setResult(producerServiceResponsePacket.getResult());
+        Channel channel = ServiceUtil.getChannel(producerServiceResponsePacket.getFromServiceId(), producerServiceResponsePacket.getFromServiceName());
         if (channel != null && channel.isActive()) {
-            channel.writeAndFlush(clientServiceResponsePacket);
+            channel.writeAndFlush(consumerServiceResponsePacket);
         }
     }
 }

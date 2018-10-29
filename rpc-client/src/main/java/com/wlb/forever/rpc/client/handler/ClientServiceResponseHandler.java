@@ -1,7 +1,7 @@
 package com.wlb.forever.rpc.client.handler;
 
 import com.wlb.forever.rpc.client.call.RpcJsonCaller;
-import com.wlb.forever.rpc.common.protocol.response.ClientServiceResponsePacket;
+import com.wlb.forever.rpc.common.protocol.response.ConsumerServiceResponsePacket;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -15,7 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @Description:
  */
 @ChannelHandler.Sharable
-public class ClientServiceResponseHandler extends SimpleChannelInboundHandler<ClientServiceResponsePacket> {
+public class ClientServiceResponseHandler extends SimpleChannelInboundHandler<ConsumerServiceResponsePacket> {
     public static Map<String, RpcJsonCaller> messageMap = new ConcurrentHashMap<>();
 
     private ClientServiceResponseHandler() {
@@ -31,10 +31,10 @@ public class ClientServiceResponseHandler extends SimpleChannelInboundHandler<Cl
     }
 
     @Override
-    protected void channelRead0(ChannelHandlerContext channelHandlerContext, ClientServiceResponsePacket clientServiceResponsePacket) throws Exception {
-        String requestId = clientServiceResponsePacket.getRequestId();
+    protected void channelRead0(ChannelHandlerContext channelHandlerContext, ConsumerServiceResponsePacket consumerServiceResponsePacket) throws Exception {
+        String requestId = consumerServiceResponsePacket.getRequestId();
         if (messageMap.containsKey(requestId)){
-            messageMap.get(requestId).over(clientServiceResponsePacket);
+            messageMap.get(requestId).over(consumerServiceResponsePacket);
             messageMap.remove(requestId);
         }
     }

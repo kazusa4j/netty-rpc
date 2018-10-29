@@ -1,9 +1,8 @@
 package com.wlb.forever.rpc.client.call;
 
 import com.wlb.forever.rpc.client.exception.RpcCallClientException;
-import com.wlb.forever.rpc.common.protocol.request.ClientServiceRequestPacket;
-import com.wlb.forever.rpc.common.protocol.response.ClientServiceResponsePacket;
-import io.netty.channel.Channel;
+import com.wlb.forever.rpc.common.protocol.request.ConsumerServiceRequestPacket;
+import com.wlb.forever.rpc.common.protocol.response.ConsumerServiceResponsePacket;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.TimeUnit;
@@ -20,9 +19,9 @@ import java.util.concurrent.locks.ReentrantLock;
 public abstract class AbstractRpcCaller implements RpcCaller {
     protected Lock lock = new ReentrantLock();
     protected Condition finish = lock.newCondition();
-    protected ClientServiceResponsePacket response;
+    protected ConsumerServiceResponsePacket response;
 
-    public void over(ClientServiceResponsePacket reponse) {
+    public void over(ConsumerServiceResponsePacket reponse) {
         try {
             lock.lock();
             finish.signal();
@@ -46,5 +45,5 @@ public abstract class AbstractRpcCaller implements RpcCaller {
         }
     }
 
-    public abstract <T> T getResult(ClientServiceRequestPacket clientServiceRequestPacket, Class<T> clazz);
+    public abstract <T> T getResult(ConsumerServiceRequestPacket consumerServiceRequestPacket, Class<T> clazz);
 }
