@@ -33,7 +33,9 @@ public class RPCServerHandler extends SimpleChannelInboundHandler<Packet> {
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, Packet packet) throws Exception {
-        handlerMap.get(packet.getCommand()).channelRead(ctx, packet);
+        if (handlerMap.containsKey(packet.getCommand())) {
+            handlerMap.get(packet.getCommand()).channelRead(ctx, packet);
+        }
     }
 
     @Override

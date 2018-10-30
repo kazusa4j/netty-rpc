@@ -15,32 +15,32 @@ import java.util.concurrent.ConcurrentHashMap;
  * @Description:
  */
 @ChannelHandler.Sharable
-public class ClientServiceResponseHandler extends SimpleChannelInboundHandler<ConsumerServiceResponsePacket> {
+public class ConsumerServiceResponseHandler extends SimpleChannelInboundHandler<ConsumerServiceResponsePacket> {
     public static Map<String, RpcJsonCaller> messageMap = new ConcurrentHashMap<>();
 
-    private ClientServiceResponseHandler() {
+    private ConsumerServiceResponseHandler() {
 
     }
 
-    private static class ClientServiceResponseHandlerHolder {
-        private static final ClientServiceResponseHandler INSTANCE = new ClientServiceResponseHandler();
+    private static class ConsumerServiceResponseHandlerHolder {
+        private static final ConsumerServiceResponseHandler INSTANCE = new ConsumerServiceResponseHandler();
     }
 
-    public static ClientServiceResponseHandler getInstance() {
-        return ClientServiceResponseHandlerHolder.INSTANCE;
+    public static ConsumerServiceResponseHandler getInstance() {
+        return ConsumerServiceResponseHandlerHolder.INSTANCE;
     }
 
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, ConsumerServiceResponsePacket consumerServiceResponsePacket) throws Exception {
         String requestId = consumerServiceResponsePacket.getRequestId();
-        if (messageMap.containsKey(requestId)){
+        if (messageMap.containsKey(requestId)) {
             messageMap.get(requestId).over(consumerServiceResponsePacket);
             messageMap.remove(requestId);
         }
     }
 
-    public static void clearOverRequest(String requestId){
-        if (messageMap.containsKey(requestId)){
+    public static void clearOverRequest(String requestId) {
+        if (messageMap.containsKey(requestId)) {
             messageMap.remove(requestId);
         }
     }

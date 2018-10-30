@@ -15,10 +15,10 @@ import lombok.extern.slf4j.Slf4j;
  */
 @ChannelHandler.Sharable
 @Slf4j
-public class ServerServiceRequestHandler extends SimpleChannelInboundHandler<ProducerServiceRequestPacket> {
-    public static final ServerServiceRequestHandler INSTANCE = new ServerServiceRequestHandler();
+public class ProducerServiceRequestHandler extends SimpleChannelInboundHandler<ProducerServiceRequestPacket> {
+    public static final ProducerServiceRequestHandler INSTANCE = new ProducerServiceRequestHandler();
 
-    private ServerServiceRequestHandler() {
+    private ProducerServiceRequestHandler() {
 
     }
 

@@ -1,6 +1,6 @@
 package com.wlb.forever.rpc.client.handler;
 
-import com.wlb.forever.rpc.client.RpcClient;
+import com.wlb.forever.rpc.client.RpcClientStarter;
 import com.wlb.forever.rpc.common.protocol.request.HeartBeatRequestPacket;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -30,10 +30,10 @@ public class HeartBeatTimerHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelInactive(ChannelHandlerContext ctx) {
         ctx.executor().shutdownGracefully();
-        if (RpcClient.STATUS == 3) {
-            RpcClient.STATUS = 1;
+        if (RpcClientStarter.STATUS == 3) {
+            RpcClientStarter.STATUS = 1;
             log.error("与RPC服务起连接断开，开始重连");
-            RpcClient.start();
+            RpcClientStarter.start();
         }
     }
 }

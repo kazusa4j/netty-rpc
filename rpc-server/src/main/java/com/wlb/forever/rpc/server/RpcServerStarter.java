@@ -24,7 +24,7 @@ import javax.annotation.PreDestroy;
  */
 @Component
 @Slf4j
-public class RpcServer {
+public class RpcServerStarter {
     private NioEventLoopGroup boosGroup = new NioEventLoopGroup();
     private NioEventLoopGroup workerGroup = new NioEventLoopGroup();
 

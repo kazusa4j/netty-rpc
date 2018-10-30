@@ -1,8 +1,9 @@
 package com.wlb.forever.rpc.client;
 
-import com.wlb.forever.rpc.client.handler.ClientServiceResponseHandler;
+import com.wlb.forever.rpc.client.handler.ConsumerServiceResponseHandler;
 import com.wlb.forever.rpc.client.handler.HeartBeatTimerHandler;
-import com.wlb.forever.rpc.client.handler.ServerServiceRequestHandler;
+import com.wlb.forever.rpc.client.handler.ProducerServiceRequestHandler;
+import com.wlb.forever.rpc.client.handler.RpcClientHandler;
 import com.wlb.forever.rpc.common.handler.PacketCodecHandler;
 import com.wlb.forever.rpc.common.handler.RPCIdleStateHandler;
 import com.wlb.forever.rpc.common.handler.UnPacketHandler;
@@ -22,7 +23,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
@@ -34,7 +34,7 @@ import java.util.concurrent.TimeUnit;
 @Component
 @Slf4j
 @Data
-public class RpcClient {
+public class RpcClientStarter {
 
     public static volatile int STATUS = 1;//1:未连接；2:连接中;3:已连接
     private static NioEventLoopGroup workerGroup;
@@ -118,10 +118,8 @@ public class RpcClient {
                         ch.pipeline().addLast(PacketCodecHandler.INSTANCE);
                         // 心跳定时器
                         ch.pipeline().addLast(new HeartBeatTimerHandler());
-                        // 服务调用返回
-                        ch.pipeline().addLast(ClientServiceResponseHandler.getInstance());
-                        // 服务调用请求
-                        ch.pipeline().addLast(ServerServiceRequestHandler.INSTANCE);
+                        // RPC客户端handler
+                        ch.pipeline().addLast(RpcClientHandler.INSTANCE);
                     }
                 });
 
@@ -149,7 +147,7 @@ public class RpcClient {
             if (future.isSuccess()) {
                 STATUS = 3;
                 log.info("RPC服务器连接成功");
-                RpcClient.channel = ((ChannelFuture) future).channel();
+                RpcClientStarter.channel = ((ChannelFuture) future).channel();
                 channel.writeAndFlush(new RegisterServerRequestPacket(SERVICE_ID, SERVICE_NAME));
             } else if (retry == 0) {
                 log.info(AWAYS_RETRY_INTERVAL + "秒后尝试重连RPC服务器");
