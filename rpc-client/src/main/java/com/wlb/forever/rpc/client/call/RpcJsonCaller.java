@@ -5,6 +5,7 @@ import com.wlb.forever.rpc.client.RpcClient;
 import com.wlb.forever.rpc.client.exception.RpcCallClientException;
 import com.wlb.forever.rpc.client.handler.ClientServiceResponseHandler;
 import com.wlb.forever.rpc.common.protocol.request.ConsumerServiceRequestPacket;
+import com.wlb.forever.rpc.common.utils.HessianUtil;
 import lombok.extern.slf4j.Slf4j;
 
 
@@ -34,7 +35,7 @@ public class RpcJsonCaller extends AbstractRpcCaller {
                 Integer code = this.response.getCode();
                 if (code == 0) {
                     if (this.response.getResult() != null) {
-                        return JSON.parseObject(this.response.getResult().toString(), clazz);
+                        return HessianUtil.deserialize(clazz, this.response.getResult());
                     } else {
                         return null;
                     }

@@ -1,6 +1,7 @@
 package com.wlb.forever.rpc.common.serializer;
 
 
+import com.wlb.forever.rpc.common.serializer.impl.HessianSerilizer;
 import com.wlb.forever.rpc.common.serializer.impl.JSONSerializer;
 
 /**
@@ -9,10 +10,12 @@ import com.wlb.forever.rpc.common.serializer.impl.JSONSerializer;
  * @Description:
  */
 public interface Serializer {
-    Serializer DEFAULT = new JSONSerializer();
+    Serializer JSON_SERIALIZER = new JSONSerializer();
+    Serializer HESSIAN_SERIALIZER = new HessianSerilizer();
 
     /**
      * 序列化算法
+     *
      * @return
      */
     byte getSerializerAlgorithm();

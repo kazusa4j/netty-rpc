@@ -12,7 +12,7 @@ public interface SerializerAlgorithm {
     byte JSON = 1;
 
     /**
-     *JAVA 默认序列化
+     *hessian 序列化
      */
-    byte JAVA = 2;
+    byte HESSIAN = 2;
 }

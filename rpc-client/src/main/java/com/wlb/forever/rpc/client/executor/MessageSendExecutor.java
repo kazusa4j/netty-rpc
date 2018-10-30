@@ -3,6 +3,7 @@ package com.wlb.forever.rpc.client.executor;
 import com.wlb.forever.rpc.client.utils.RpcBeanUtil;
 import com.wlb.forever.rpc.common.protocol.request.ProducerServiceRequestPacket;
 import com.wlb.forever.rpc.common.protocol.response.ProducerServiceResponsePacket;
+import com.wlb.forever.rpc.common.utils.HessianUtil;
 import com.wlb.forever.rpc.common.utils.SpringBeanUtil;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.extern.slf4j.Slf4j;
@@ -80,7 +81,7 @@ public class MessageSendExecutor {
                     setSuccessDesc(desc, beanName, methodName, classzz);
                     producerServiceResponsePacket.setCode(code);
                     producerServiceResponsePacket.setDesc(desc.toString());
-                    producerServiceResponsePacket.setResult(result);
+                    producerServiceResponsePacket.setResult(HessianUtil.serializer(result));
                     log.info(desc.toString());
                     return producerServiceResponsePacket;
                 } catch (Exception e) {

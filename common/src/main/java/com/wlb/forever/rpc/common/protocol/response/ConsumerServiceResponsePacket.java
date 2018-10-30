@@ -19,7 +19,7 @@ public class ConsumerServiceResponsePacket extends Packet {
     private String requestId;
     private Integer code = 0;
     private String desc = "";
-    private Object result=null;
+    private byte[] result;
 
     @Override
     public Byte getCommand() {

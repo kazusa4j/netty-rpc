@@ -22,7 +22,7 @@ public class ProducerServiceResponsePacket extends Packet {
     private String fromServiceName;
     private Integer code = 0;
     private String desc = "";
-    private Object result=null;
+    private byte[] result;
 
     @Override
     public Byte getCommand() {

@@ -29,7 +29,7 @@ public class TestRpcController {
             jr.setResult(user);
             return ResponseEntity.ok(jr);
         } catch (Exception e) {
-            //e.printStackTrace();
+            e.printStackTrace();
             jr.setStatus(-1);
             jr.setDesc("出现异常");
             return ResponseEntity.ok(jr);

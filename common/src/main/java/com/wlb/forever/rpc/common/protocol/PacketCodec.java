@@ -1,5 +1,6 @@
 package com.wlb.forever.rpc.common.protocol;
 
+import com.wlb.forever.rpc.common.config.RpcCommonUtil;
 import com.wlb.forever.rpc.common.protocol.request.ConsumerServiceRequestPacket;
 import com.wlb.forever.rpc.common.protocol.request.HeartBeatRequestPacket;
 import com.wlb.forever.rpc.common.protocol.request.RegisterServerRequestPacket;
@@ -9,6 +10,7 @@ import com.wlb.forever.rpc.common.protocol.response.HeartBeatResponsePacket;
 import com.wlb.forever.rpc.common.protocol.response.RegisterServerResponsePacket;
 import com.wlb.forever.rpc.common.protocol.response.ProducerServiceResponsePacket;
 import com.wlb.forever.rpc.common.serializer.Serializer;
+import com.wlb.forever.rpc.common.serializer.impl.HessianSerilizer;
 import com.wlb.forever.rpc.common.serializer.impl.JSONSerializer;
 import io.netty.buffer.ByteBuf;
 
@@ -26,6 +28,7 @@ import static com.wlb.forever.rpc.common.protocol.command.Command.*;
 public class PacketCodec {
     public static final int MAGIC_NUMBER = 0x11910898;
     public static final PacketCodec INSTANCE = new PacketCodec();
+    private Serializer DEFAULT_SERIALIZER = getDefaultSerializer();
 
     private final Map<Byte, Class<? extends Packet>> packetTypeMap;
     private final Map<Byte, Serializer> serializerMap;
@@ -42,18 +45,20 @@ public class PacketCodec {
         packetTypeMap.put(PRODUCER_SERVICE_REQUEST, ProducerServiceRequestPacket.class);
         packetTypeMap.put(PRODUCER_SERVICE_RESPONSE, ProducerServiceResponsePacket.class);
         serializerMap = new HashMap<>();
-        Serializer serializer = new JSONSerializer();
-        serializerMap.put(serializer.getSerializerAlgorithm(), serializer);
+        Serializer jSONSerializer = new JSONSerializer();
+        Serializer hessianSerilizer = new HessianSerilizer();
+        serializerMap.put(jSONSerializer.getSerializerAlgorithm(), jSONSerializer);
+        serializerMap.put(hessianSerilizer.getSerializerAlgorithm(), hessianSerilizer);
     }
 
     public void encode(ByteBuf byteBuf, Packet packet) {
         // 1. 序列化 java 对象
-        byte[] bytes = Serializer.DEFAULT.serialize(packet);
+        byte[] bytes = DEFAULT_SERIALIZER.serialize(packet);
 
         // 2. 实际编码过程
         byteBuf.writeInt(MAGIC_NUMBER);
         byteBuf.writeByte(packet.getVersion());
-        byteBuf.writeByte(Serializer.DEFAULT.getSerializerAlgorithm());
+        byteBuf.writeByte(DEFAULT_SERIALIZER.getSerializerAlgorithm());
         byteBuf.writeByte(packet.getCommand());
         byteBuf.writeInt(bytes.length);
         byteBuf.writeBytes(bytes);
@@ -97,5 +102,17 @@ public class PacketCodec {
     private Class<? extends Packet> getRequestType(byte command) {
 
         return packetTypeMap.get(command);
+    }
+
+
+    private static Serializer getDefaultSerializer() {
+        switch (RpcCommonUtil.ENCODE) {
+            case "JSON":
+                return new JSONSerializer();
+            case "HESSIAN":
+                return new HessianSerilizer();
+            default:
+                return new JSONSerializer();
+        }
     }
 }
