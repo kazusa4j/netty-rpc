@@ -4,21 +4,22 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 /**
  * @Auther: william
- * @Date: 18/10/29 17:48
+ * @Date: 18/10/30 15:00
  * @Description:
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RpcInfo {
+public class RpcResponseInfo implements Serializable {
+    private static final long serialVersionUID = -3730811428883162419L;
     private String requestId;
-    private String toServiceName;
     private String fromServiceId;
     private String fromServiceName;
-    private String beanName;
-    private String methodName;
-    private Class[] paramTypes;
-    private Object[] params;
+    private Integer code = 0;
+    private String desc = "";
+    private byte[] result;
 }

@@ -1,7 +1,9 @@
 package com.wlb.forever.rpc.client.wrapper;
 
 import com.wlb.forever.rpc.client.RpcClientStarter;
-import com.wlb.forever.rpc.client.call.RpcJsonCaller;
+import com.wlb.forever.rpc.client.call.RpcCaller;
+import com.wlb.forever.rpc.common.entity.RpcRequestInfo;
+import com.wlb.forever.rpc.common.entity.RpcResponseInfo;
 import com.wlb.forever.rpc.common.protocol.request.ConsumerServiceRequestPacket;
 import com.wlb.forever.rpc.common.utils.UniqueIdUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -29,22 +31,25 @@ public class RpcClientMethod {
 
     /**
      * 向服务器发送RPC请求包并返回结果
+     *
      * @param args
      * @return
      */
     public Object execute(Object[] args) {
         Object result;
-        RpcJsonCaller rpcServiceCaller = new RpcJsonCaller();
+        RpcCaller rpcServiceCaller = new RpcCaller();
         ConsumerServiceRequestPacket consumerServiceRequestPacket = new ConsumerServiceRequestPacket();
+        RpcRequestInfo rpcRequestInfo = new RpcRequestInfo();
         String requestId = UniqueIdUtil.getUUID();
-        consumerServiceRequestPacket.setRequestId(requestId);
-        consumerServiceRequestPacket.setToServiceName(serviceName);
-        consumerServiceRequestPacket.setFromServiceId(RpcClientStarter.SERVICE_ID);
-        consumerServiceRequestPacket.setFromServiceName(RpcClientStarter.SERVICE_NAME);
-        consumerServiceRequestPacket.setBeanName(beanName);
-        consumerServiceRequestPacket.setMethodName(method.methodName);
-        consumerServiceRequestPacket.setParamTypes(method.paramTypes);
-        consumerServiceRequestPacket.setParams(args);
+        rpcRequestInfo.setRequestId(requestId);
+        rpcRequestInfo.setToServiceName(serviceName);
+        rpcRequestInfo.setFromServiceId(RpcClientStarter.SERVICE_ID);
+        rpcRequestInfo.setFromServiceName(RpcClientStarter.SERVICE_NAME);
+        rpcRequestInfo.setBeanName(beanName);
+        rpcRequestInfo.setMethodName(method.methodName);
+        rpcRequestInfo.setParamTypes(method.paramTypes);
+        rpcRequestInfo.setParams(args);
+        consumerServiceRequestPacket.setRpcRequestInfo(rpcRequestInfo);
         result = rpcServiceCaller.getResult(consumerServiceRequestPacket, method.returnType);
         return result;
     }

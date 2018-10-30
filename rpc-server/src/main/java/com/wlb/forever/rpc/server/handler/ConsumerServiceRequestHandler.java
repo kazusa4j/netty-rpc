@@ -1,5 +1,6 @@
 package com.wlb.forever.rpc.server.handler;
 
+import com.wlb.forever.rpc.common.entity.RpcResponseInfo;
 import com.wlb.forever.rpc.common.protocol.request.ConsumerServiceRequestPacket;
 import com.wlb.forever.rpc.common.protocol.response.ConsumerServiceResponsePacket;
 import com.wlb.forever.rpc.server.executor.ClientRequestExecutor;
@@ -35,12 +36,14 @@ public class ConsumerServiceRequestHandler extends SimpleChannelInboundHandler<C
             clientRequestExecutor.executeTask(channelHandlerContext, consumerServiceRequestPacket);
         } catch (Exception e) {
             ConsumerServiceResponsePacket consumerServiceResponsePacket = new ConsumerServiceResponsePacket();
-            consumerServiceResponsePacket.setRequestId(consumerServiceRequestPacket.getRequestId());
-            consumerServiceResponsePacket.setCode(SERVER_EXCEPTION);
-            consumerServiceResponsePacket.setDesc("RPC服务器出现异常");
-            consumerServiceResponsePacket.setResult(null);
+            RpcResponseInfo rpcResponseInfo = new RpcResponseInfo();
+            rpcResponseInfo.setRequestId(consumerServiceRequestPacket.getRpcRequestInfo().getRequestId());
+            rpcResponseInfo.setCode(SERVER_EXCEPTION);
+            rpcResponseInfo.setDesc("RPC服务器出现异常");
+            rpcResponseInfo.setResult(null);
+            consumerServiceResponsePacket.setRpcResponseInfo(rpcResponseInfo);
             channelHandlerContext.writeAndFlush(consumerServiceResponsePacket);
-            log.warn("{}调用{}的RPC服务出现异常", consumerServiceRequestPacket.getFromServiceName(), consumerServiceRequestPacket.getToServiceName());
+            log.warn("{}调用{}的RPC服务出现异常", consumerServiceRequestPacket.getRpcRequestInfo().getFromServiceName(), consumerServiceRequestPacket.getRpcRequestInfo().getToServiceName());
         }
 
     }

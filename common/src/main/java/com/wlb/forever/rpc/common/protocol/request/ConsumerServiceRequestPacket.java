@@ -1,5 +1,6 @@
 package com.wlb.forever.rpc.common.protocol.request;
 
+import com.wlb.forever.rpc.common.entity.RpcRequestInfo;
 import com.wlb.forever.rpc.common.protocol.Packet;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,15 +18,7 @@ import static com.wlb.forever.rpc.common.protocol.command.Command.CONSUMER_SERVI
 @NoArgsConstructor
 @AllArgsConstructor
 public class ConsumerServiceRequestPacket extends Packet {
-
-    private String requestId;
-    private String toServiceName;
-    private String fromServiceId;
-    private String fromServiceName;
-    private String beanName;
-    private String methodName;
-    private Class[] paramTypes;
-    private Object[] params;
+    private RpcRequestInfo rpcRequestInfo;
 
     @Override
     public Byte getCommand() {

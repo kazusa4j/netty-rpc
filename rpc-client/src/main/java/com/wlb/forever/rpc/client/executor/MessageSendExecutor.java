@@ -1,10 +1,11 @@
 package com.wlb.forever.rpc.client.executor;
 
 import com.wlb.forever.rpc.client.utils.RpcBeanUtil;
+import com.wlb.forever.rpc.common.entity.RpcRequestInfo;
+import com.wlb.forever.rpc.common.entity.RpcResponseInfo;
 import com.wlb.forever.rpc.common.protocol.request.ProducerServiceRequestPacket;
 import com.wlb.forever.rpc.common.protocol.response.ProducerServiceResponsePacket;
 import com.wlb.forever.rpc.common.utils.HessianUtil;
-import com.wlb.forever.rpc.common.utils.SpringBeanUtil;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,13 +39,14 @@ public class MessageSendExecutor {
     @Async(value = "threadPoolRpc")
     public void send(ProducerServiceRequestPacket producerServiceRequestPacket, ChannelHandlerContext channelHandlerContext) {
         //checkAvtiveThreadNum();
-        String requestId = producerServiceRequestPacket.getRequestId();
-        String fromServiceId = producerServiceRequestPacket.getFromServiceId();
-        String fromServiceName = producerServiceRequestPacket.getFromServiceName();
-        String beanName = producerServiceRequestPacket.getBeanName();
-        String methodName = producerServiceRequestPacket.getMethodName();
-        Class[] classzz = producerServiceRequestPacket.getParamTypes();
-        Object[] params = producerServiceRequestPacket.getParams();
+        RpcRequestInfo rpcRequestInfo = producerServiceRequestPacket.getRpcRequestInfo();
+        String requestId = rpcRequestInfo.getRequestId();
+        String fromServiceId = rpcRequestInfo.getFromServiceId();
+        String fromServiceName = rpcRequestInfo.getFromServiceName();
+        String beanName = rpcRequestInfo.getBeanName();
+        String methodName = rpcRequestInfo.getMethodName();
+        Class[] classzz = rpcRequestInfo.getParamTypes();
+        Object[] params = rpcRequestInfo.getParams();
         ProducerServiceResponsePacket producerServiceResponsePacket = assemRpcResponsePacket(requestId, fromServiceId, fromServiceName, beanName, methodName, classzz, params);
         channelHandlerContext.writeAndFlush(producerServiceResponsePacket);
         log.info("返回{}RPC调用服务结果", fromServiceName);
@@ -63,9 +65,10 @@ public class MessageSendExecutor {
      */
     private ProducerServiceResponsePacket assemRpcResponsePacket(String requestId, String fromServiceId, String fromServiceName, String beanName, String methodName, Class[] classzz, Object[] params) {
         ProducerServiceResponsePacket producerServiceResponsePacket = new ProducerServiceResponsePacket();
-        producerServiceResponsePacket.setFromServiceId(fromServiceId);
-        producerServiceResponsePacket.setFromServiceName(fromServiceName);
-        producerServiceResponsePacket.setRequestId(requestId);
+        RpcResponseInfo rpcResponseInfo=new RpcResponseInfo();
+        rpcResponseInfo.setFromServiceId(fromServiceId);
+        rpcResponseInfo.setFromServiceName(fromServiceName);
+        rpcResponseInfo.setRequestId(requestId);
         Object bean = RpcBeanUtil.getRpcBean(beanName, methodName, classzz);
 
         StringBuilder desc = new StringBuilder();
@@ -79,10 +82,11 @@ public class MessageSendExecutor {
                 try {
                     Object result = ReflectionUtils.invokeMethod(mh, bean, params);
                     setSuccessDesc(desc, beanName, methodName, classzz);
-                    producerServiceResponsePacket.setCode(code);
-                    producerServiceResponsePacket.setDesc(desc.toString());
-                    producerServiceResponsePacket.setResult(HessianUtil.serializer(result));
+                    rpcResponseInfo.setCode(code);
+                    rpcResponseInfo.setDesc(desc.toString());
+                    rpcResponseInfo.setResult(HessianUtil.serializer(result));
                     log.info(desc.toString());
+                    producerServiceResponsePacket.setRpcResponseInfo(rpcResponseInfo);
                     return producerServiceResponsePacket;
                 } catch (Exception e) {
                     code = SERVICE_EXCEPTION;
@@ -94,8 +98,9 @@ public class MessageSendExecutor {
             setNoBeanDesc(desc, beanName);
         }
         log.error(desc.toString());
-        producerServiceResponsePacket.setCode(code);
-        producerServiceResponsePacket.setDesc(desc.toString());
+        rpcResponseInfo.setCode(code);
+        rpcResponseInfo.setDesc(desc.toString());
+        producerServiceResponsePacket.setRpcResponseInfo(rpcResponseInfo);
         return producerServiceResponsePacket;
     }
 

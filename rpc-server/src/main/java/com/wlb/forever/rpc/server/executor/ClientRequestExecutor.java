@@ -1,5 +1,6 @@
 package com.wlb.forever.rpc.server.executor;
 
+import com.wlb.forever.rpc.common.entity.RpcResponseInfo;
 import com.wlb.forever.rpc.common.protocol.Packet;
 import com.wlb.forever.rpc.common.protocol.request.ConsumerServiceRequestPacket;
 import com.wlb.forever.rpc.common.protocol.request.ProducerServiceRequestPacket;
@@ -31,25 +32,21 @@ public class ClientRequestExecutor {
     @Async(value = "threadPoolClientRequest")
     public void executeTask(ChannelHandlerContext ch, Packet packet) {
         ConsumerServiceRequestPacket consumerServiceRequestPacket = (ConsumerServiceRequestPacket) packet;
-        List<Channel> channels = ServiceUtil.getChannels(consumerServiceRequestPacket.getToServiceName());
+        List<Channel> channels = ServiceUtil.getChannels(consumerServiceRequestPacket.getRpcRequestInfo().getToServiceName());
         if (channels == null || channels.size() <= 0) {
-            log.warn("RPC服务({})不存在", consumerServiceRequestPacket.getToServiceName());
+            log.warn("RPC服务({})不存在", consumerServiceRequestPacket.getRpcRequestInfo().getToServiceName());
             ConsumerServiceResponsePacket consumerServiceResponsePacket = new ConsumerServiceResponsePacket();
-            consumerServiceResponsePacket.setRequestId(consumerServiceRequestPacket.getRequestId());
-            consumerServiceResponsePacket.setCode(NO_SERVICE);
-            consumerServiceResponsePacket.setDesc("(" + consumerServiceRequestPacket.getToServiceName() + ")RPC服务不存在");
-            consumerServiceResponsePacket.setResult(null);
+            RpcResponseInfo rpcResponseInfo = new RpcResponseInfo();
+            rpcResponseInfo.setRequestId(consumerServiceRequestPacket.getRpcRequestInfo().getRequestId());
+            rpcResponseInfo.setCode(NO_SERVICE);
+            rpcResponseInfo.setDesc("(" + consumerServiceRequestPacket.getRpcRequestInfo().getToServiceName() + ")RPC服务不存在");
+            rpcResponseInfo.setResult(null);
+            consumerServiceResponsePacket.setRpcResponseInfo(rpcResponseInfo);
             ch.writeAndFlush(consumerServiceResponsePacket);
         } else {
             channels.forEach(channel -> {
                 ProducerServiceRequestPacket producerServiceRequestPacket = new ProducerServiceRequestPacket();
-                producerServiceRequestPacket.setFromServiceId(consumerServiceRequestPacket.getFromServiceId());
-                producerServiceRequestPacket.setFromServiceName(consumerServiceRequestPacket.getFromServiceName());
-                producerServiceRequestPacket.setRequestId(consumerServiceRequestPacket.getRequestId());
-                producerServiceRequestPacket.setBeanName(consumerServiceRequestPacket.getBeanName());
-                producerServiceRequestPacket.setMethodName(consumerServiceRequestPacket.getMethodName());
-                producerServiceRequestPacket.setParamTypes(consumerServiceRequestPacket.getParamTypes());
-                producerServiceRequestPacket.setParams(consumerServiceRequestPacket.getParams());
+                producerServiceRequestPacket.setRpcRequestInfo(consumerServiceRequestPacket.getRpcRequestInfo());
                 channel.writeAndFlush(producerServiceRequestPacket);
             });
         }

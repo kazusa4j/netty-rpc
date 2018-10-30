@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Slf4j
-public class ServerResponseExecutor{
+public class ServerResponseExecutor {
     @Autowired
     private ThreadPoolTaskExecutor threadPoolServerResponse;//变量名称为定义的线程池bean定义的name属性名。
 
@@ -27,11 +27,8 @@ public class ServerResponseExecutor{
     public void executeTask(ChannelHandlerContext ch, Packet packet) {
         ProducerServiceResponsePacket producerServiceResponsePacket = (ProducerServiceResponsePacket) packet;
         ConsumerServiceResponsePacket consumerServiceResponsePacket = new ConsumerServiceResponsePacket();
-        consumerServiceResponsePacket.setRequestId(producerServiceResponsePacket.getRequestId());
-        consumerServiceResponsePacket.setCode(producerServiceResponsePacket.getCode());
-        consumerServiceResponsePacket.setDesc(producerServiceResponsePacket.getDesc());
-        consumerServiceResponsePacket.setResult(producerServiceResponsePacket.getResult());
-        Channel channel = ServiceUtil.getChannel(producerServiceResponsePacket.getFromServiceId(), producerServiceResponsePacket.getFromServiceName());
+        consumerServiceResponsePacket.setRpcResponseInfo(producerServiceResponsePacket.getRpcResponseInfo());
+        Channel channel = ServiceUtil.getChannel(producerServiceResponsePacket.getRpcResponseInfo().getFromServiceId(), producerServiceResponsePacket.getRpcResponseInfo().getFromServiceName());
         if (channel != null && channel.isActive()) {
             channel.writeAndFlush(consumerServiceResponsePacket);
         }

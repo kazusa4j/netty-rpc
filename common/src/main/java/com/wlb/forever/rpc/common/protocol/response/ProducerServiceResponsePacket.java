@@ -1,5 +1,6 @@
 package com.wlb.forever.rpc.common.protocol.response;
 
+import com.wlb.forever.rpc.common.entity.RpcResponseInfo;
 import com.wlb.forever.rpc.common.protocol.Packet;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,12 +18,7 @@ import static com.wlb.forever.rpc.common.protocol.command.Command.PRODUCER_SERVI
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProducerServiceResponsePacket extends Packet {
-    private String requestId;
-    private String fromServiceId;
-    private String fromServiceName;
-    private Integer code = 0;
-    private String desc = "";
-    private byte[] result;
+    private RpcResponseInfo rpcResponseInfo;
 
     @Override
     public Byte getCommand() {
