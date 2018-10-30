@@ -7,11 +7,9 @@ import com.wlb.forever.rpc.common.serializer.impl.JSONSerializer;
 /**
  * @Auther: william
  * @Date: 18/10/17 16:38
- * @Description:
+ * @Description:序列化
  */
 public interface Serializer {
-    Serializer JSON_SERIALIZER = new JSONSerializer();
-    Serializer HESSIAN_SERIALIZER = new HessianSerilizer();
 
     /**
      * 序列化算法

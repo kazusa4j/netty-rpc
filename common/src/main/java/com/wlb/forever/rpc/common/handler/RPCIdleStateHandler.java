@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * @Auther: william
  * @Date: 18/10/17 16:20
- * @Description:
+ * @Description:心跳检测HANDLER
  */
 @Slf4j
 public class RPCIdleStateHandler extends IdleStateHandler {

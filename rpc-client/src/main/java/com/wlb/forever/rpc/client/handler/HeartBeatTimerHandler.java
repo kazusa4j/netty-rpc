@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * @Auther: william
  * @Date: 18/10/18 09:24
- * @Description:
+ * @Description: 心跳请求HANDLER
  */
 @Slf4j
 public class HeartBeatTimerHandler extends ChannelInboundHandlerAdapter {

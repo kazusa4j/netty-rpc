@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * @Auther: william
  * @Date: 18/10/17 16:47
- * @Description:
+ * @Description:编解码包HANDLER
  */
 @ChannelHandler.Sharable
 public class PacketCodecHandler extends MessageToMessageCodec<ByteBuf, Packet> {
@@ -22,11 +22,23 @@ public class PacketCodecHandler extends MessageToMessageCodec<ByteBuf, Packet> {
 
     }
 
+    /**
+     * 解码
+     * @param ctx
+     * @param byteBuf
+     * @param out
+     */
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf byteBuf, List<Object> out) {
         out.add(PacketCodec.INSTANCE.decode(byteBuf));
     }
 
+    /**
+     * 编码
+     * @param ctx
+     * @param packet
+     * @param out
+     */
     @Override
     protected void encode(ChannelHandlerContext ctx, Packet packet, List<Object> out) {
         ByteBuf byteBuf = ctx.channel().alloc().ioBuffer();

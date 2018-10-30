@@ -7,7 +7,7 @@ import com.wlb.forever.rpc.common.serializer.SerializerAlgorithm;
 /**
  * @Auther: william
  * @Date: 18/10/17 16:39
- * @Description:
+ * @Description:JSON序列化
  */
 public class JSONSerializer implements Serializer {
     @Override

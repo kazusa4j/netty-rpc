@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * @Auther: william
  * @Date: 18/10/18 11:18
- * @Description:
+ * @Description: 接收注册服务请求HANDLER
  */
 @ChannelHandler.Sharable
 @Slf4j

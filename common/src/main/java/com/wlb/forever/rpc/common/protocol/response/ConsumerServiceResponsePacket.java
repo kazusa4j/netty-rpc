@@ -11,7 +11,7 @@ import static com.wlb.forever.rpc.common.protocol.command.Command.CONSUMER_SERVI
 /**
  * @Auther: william
  * @Date: 18/10/19 10:02
- * @Description:
+ * @Description:客户端调用服务响应包
  */
 @NoArgsConstructor
 @AllArgsConstructor

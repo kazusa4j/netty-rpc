@@ -1,6 +1,5 @@
 package com.wlb.forever.rpc.common.protocol;
 
-import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -8,7 +7,7 @@ import java.io.Serializable;
 /**
  * @Auther: william
  * @Date: 18/10/17 16:29
- * @Description:
+ * @Description:RPC包抽象类
  */
 @Data
 public abstract class Packet implements Serializable {

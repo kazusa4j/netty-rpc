@@ -23,7 +23,7 @@ import static com.wlb.forever.rpc.common.protocol.command.Command.*;
 /**
  * @Auther: william
  * @Date: 18/10/17 16:32
- * @Description:
+ * @Description:包编解码
  */
 public class PacketCodec {
     public static final int MAGIC_NUMBER = 0x11910898;

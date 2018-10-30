@@ -16,7 +16,7 @@ import static com.wlb.forever.rpc.common.constant.RpcResponseCode.SERVER_EXCEPTI
 /**
  * @Auther: william
  * @Date: 18/10/19 10:09
- * @Description:
+ * @Description: 接收客户端RPC调用HANDLER
  */
 @Slf4j
 @ChannelHandler.Sharable

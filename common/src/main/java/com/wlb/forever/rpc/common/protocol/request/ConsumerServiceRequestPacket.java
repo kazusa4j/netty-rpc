@@ -12,7 +12,7 @@ import static com.wlb.forever.rpc.common.protocol.command.Command.CONSUMER_SERVI
 /**
  * @Auther: william
  * @Date: 18/10/19 09:46
- * @Description:
+ * @Description:客户端调用服务包
  */
 @Data
 @NoArgsConstructor

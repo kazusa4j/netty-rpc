@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * @Auther: william
  * @Date: 18/10/18 11:32
- * @Description:
+ * @Description: 注册服务工具类
  */
 @Slf4j
 public class ServiceUtil {

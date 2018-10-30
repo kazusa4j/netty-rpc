@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * @Auther: william
  * @Date: 18/10/23 14:29
- * @Description:
+ * @Description: 代理对象
  */
 @Slf4j
 public class RpcClientProxy<T> implements InvocationHandler, Serializable {

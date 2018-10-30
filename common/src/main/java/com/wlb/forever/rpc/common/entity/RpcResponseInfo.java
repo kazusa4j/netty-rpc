@@ -9,7 +9,7 @@ import java.io.Serializable;
 /**
  * @Auther: william
  * @Date: 18/10/30 15:00
- * @Description:
+ * @Description:RPC调用返回结果信息
  */
 @Data
 @NoArgsConstructor

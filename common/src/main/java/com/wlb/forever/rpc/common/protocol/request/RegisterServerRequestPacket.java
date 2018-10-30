@@ -11,7 +11,7 @@ import static com.wlb.forever.rpc.common.protocol.command.Command.REGISTER_SERVE
 /**
  * @Auther: william
  * @Date: 18/10/17 17:00
- * @Description:
+ * @Description:注册服务请求包
  */
 @Data
 @NoArgsConstructor

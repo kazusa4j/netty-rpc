@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * @Auther: william
  * @Date: 18/10/19 11:53
- * @Description:
+ * @Description: RPC请求返回HANDLER
  */
 @ChannelHandler.Sharable
 public class ConsumerServiceResponseHandler extends SimpleChannelInboundHandler<ConsumerServiceResponsePacket> {

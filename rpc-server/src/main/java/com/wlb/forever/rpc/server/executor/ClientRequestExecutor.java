@@ -21,7 +21,7 @@ import static com.wlb.forever.rpc.common.constant.RpcResponseCode.NO_SERVICE;
 /**
  * @Auther: william
  * @Date: 18/10/26 09:38
- * @Description:
+ * @Description: 处理消费者RPC调用
  */
 @Component
 @Slf4j

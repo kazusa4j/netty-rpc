@@ -10,9 +10,14 @@ import java.io.IOException;
 /**
  * @Auther: william
  * @Date: 18/10/30 13:38
- * @Description:
+ * @Description:HESSIAN工具类
  */
 public class HessianUtil {
+    /**
+     * 序列化
+     * @param obj
+     * @return
+     */
     public static byte[] serializer(Object obj) {
         if (obj == null) {
             throw new NullPointerException();
@@ -36,6 +41,13 @@ public class HessianUtil {
         return bytes;
     }
 
+    /**
+     * 反序列化
+     * @param clazz
+     * @param bytes
+     * @param <T>
+     * @return
+     */
     public static <T> T deserialize(Class<T> clazz, byte[] bytes) {
         ByteArrayInputStream in = new ByteArrayInputStream(bytes);
         Hessian2Input hIn = new Hessian2Input(in);

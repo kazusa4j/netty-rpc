@@ -10,7 +10,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 /**
  * @Auther: william
  * @Date: 18/10/22 10:01
- * @Description:
+ * @Description:SPRING BOOT线程池配置
  */
 @Configuration
 @EnableAsync

@@ -3,7 +3,7 @@ package com.wlb.forever.rpc.common.serializer;
 /**
  * @Auther: william
  * @Date: 18/10/17 16:38
- * @Description:
+ * @Description:序列化算法
  */
 public interface SerializerAlgorithm {
     /**

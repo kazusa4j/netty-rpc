@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * @Auther: william
  * @Date: 18/10/29 13:36
- * @Description:
+ * @Description: RPC 请求映射bean工具类
  */
 @Slf4j
 public class RpcBeanUtil {

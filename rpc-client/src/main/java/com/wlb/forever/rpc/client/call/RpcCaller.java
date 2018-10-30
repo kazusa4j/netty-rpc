@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * @Auther: william
  * @Date: 18/10/19 09:41
- * @Description:
+ * @Description:发送RPC请求包,并返回请求结果
  */
 @Slf4j
 public class RpcCaller extends AbstractRpcCallerIntf {

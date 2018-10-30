@@ -13,7 +13,7 @@ import static com.wlb.forever.rpc.common.protocol.command.Command.*;
 /**
  * @Auther: william
  * @Date: 18/10/30 14:39
- * @Description:
+ * @Description: RPC客户端HANDLER
  */
 @ChannelHandler.Sharable
 public class RpcClientHandler extends SimpleChannelInboundHandler<Packet> {

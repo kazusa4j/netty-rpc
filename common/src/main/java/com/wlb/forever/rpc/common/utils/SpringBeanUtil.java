@@ -12,7 +12,7 @@ import java.lang.reflect.Method;
 /**
  * @Auther: william
  * @Date: 18/10/18 09:58
- * @Description:
+ * @Description:SPRING BEAN工具类
  */
 @Component
 @Slf4j

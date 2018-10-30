@@ -30,7 +30,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * @Auther: william
  * @Date: 18/10/22 16:59
- * @Description:
+ * @Description: RPC请求接口注册BEAN
  */
 @Slf4j
 public class RpcClientsRegistrar implements ImportBeanDefinitionRegistrar,

@@ -7,7 +7,7 @@ import java.lang.annotation.*;
 /**
  * @Auther: william
  * @Date: 18/10/22 16:39
- * @Description:
+ * @Description:自定义RPC CLIENT注解
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)

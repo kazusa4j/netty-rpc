@@ -8,7 +8,7 @@ import static com.wlb.forever.rpc.common.protocol.command.Command.HEARTBEAT_RESP
 /**
  * @Auther: william
  * @Date: 18/10/18 09:21
- * @Description:
+ * @Description:心跳响应包
  */
 public class HeartBeatResponsePacket extends Packet {
     @Override

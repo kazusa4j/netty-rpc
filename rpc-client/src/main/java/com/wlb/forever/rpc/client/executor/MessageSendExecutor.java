@@ -21,7 +21,7 @@ import static com.wlb.forever.rpc.common.constant.RpcResponseCode.*;
 /**
  * @Auther: william
  * @Date: 18/10/22 10:13
- * @Description:
+ * @Description: 线程池处理RPC调用请求
  */
 @Component
 @Slf4j

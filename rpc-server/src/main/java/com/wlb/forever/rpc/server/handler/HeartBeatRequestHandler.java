@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * @Auther: william
  * @Date: 18/10/18 09:23
- * @Description:
+ * @Description: 接收心跳HANDLER
  */
 @ChannelHandler.Sharable
 @Slf4j

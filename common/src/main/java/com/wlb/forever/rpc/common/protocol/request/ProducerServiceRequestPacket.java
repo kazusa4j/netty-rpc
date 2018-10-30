@@ -12,7 +12,7 @@ import static com.wlb.forever.rpc.common.protocol.command.Command.PRODUCER_SERVI
 /**
  * @Auther: william
  * @Date: 18/10/19 15:58
- * @Description:
+ * @Description:服务器调用服务请求包
  */
 @Data
 @NoArgsConstructor

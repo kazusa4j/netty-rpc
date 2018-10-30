@@ -8,7 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * @Auther: william
  * @Date: 18/10/23 14:25
- * @Description:
+ * @Description: 代理工厂
  */
 public class RpcProxyFactory<T> {
     private final String serviceName;

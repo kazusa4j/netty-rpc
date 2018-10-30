@@ -16,7 +16,7 @@ import static com.wlb.forever.rpc.common.protocol.command.Command.REGISTER_SERVE
 /**
  * @Auther: william
  * @Date: 18/10/29 17:55
- * @Description:
+ * @Description: RPC服务器业务HANDLER
  */
 @ChannelHandler.Sharable
 public class RPCServerHandler extends SimpleChannelInboundHandler<Packet> {
