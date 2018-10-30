@@ -32,7 +32,7 @@ public abstract class AbstractRpcCaller implements RpcCaller {
     }
 
     protected void await() {
-        boolean timeout = false;
+        boolean timeout;
         try {
             timeout = finish.await(30 * 1000L, TimeUnit.MILLISECONDS);
         } catch (InterruptedException e) {
@@ -45,5 +45,4 @@ public abstract class AbstractRpcCaller implements RpcCaller {
         }
     }
 
-    public abstract <T> T getResult(ConsumerServiceRequestPacket consumerServiceRequestPacket, Class<T> clazz);
 }

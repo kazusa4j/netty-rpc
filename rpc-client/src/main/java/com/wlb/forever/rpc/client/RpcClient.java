@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
@@ -127,6 +128,13 @@ public class RpcClient {
         connect(bootstrap, SERVER_HOST, SERVER_PORT, INIT_RETRY_TIME);
     }
 
+
+    public static void destroy() {
+        if (workerGroup != null) {
+            workerGroup.shutdownGracefully().syncUninterruptibly();
+            log.info("关闭 Netty Client");
+        }
+    }
 
     /**
      * 连接RPC服务器

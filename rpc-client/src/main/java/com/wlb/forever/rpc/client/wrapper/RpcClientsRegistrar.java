@@ -119,7 +119,6 @@ public class RpcClientsRegistrar implements ImportBeanDefinitionRegistrar,
                 log.error("类{}不存在", className);
                 return;
             }
-            log.error("客户端注册BEANNAME{}", beanName);
         }
         try {
             addRpcClient(serviceName, beanName, Class.forName(className));

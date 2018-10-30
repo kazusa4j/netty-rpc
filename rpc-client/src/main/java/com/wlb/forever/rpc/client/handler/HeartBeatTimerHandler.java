@@ -33,7 +33,6 @@ public class HeartBeatTimerHandler extends ChannelInboundHandlerAdapter {
         if (RpcClient.STATUS == 3) {
             RpcClient.STATUS = 1;
             log.error("与RPC服务起连接断开，开始重连");
-
             RpcClient.start();
         }
     }

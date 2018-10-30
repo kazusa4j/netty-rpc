@@ -50,8 +50,6 @@ public class RpcServer {
                         ch.pipeline().addLast(new UnPacketHandler());
                         //编码解码
                         ch.pipeline().addLast(PacketCodecHandler.INSTANCE);
-                        //注册RPC服务生产者
-                        ch.pipeline().addLast(RegisterRequestHandler.INSTANCE);
                         //接收心跳
                         ch.pipeline().addLast(HeartBeatRequestHandler.INSTANCE);
                         //RPC服务handler
@@ -64,7 +62,7 @@ public class RpcServer {
     @PreDestroy
     public void destroy() {
         boosGroup.shutdownGracefully().syncUninterruptibly();
-        boosGroup.shutdownGracefully().syncUninterruptibly();
+        workerGroup.shutdownGracefully().syncUninterruptibly();
         log.info("关闭 Netty RPC Server成功");
     }
 
