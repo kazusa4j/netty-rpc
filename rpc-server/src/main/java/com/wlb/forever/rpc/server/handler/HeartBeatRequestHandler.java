@@ -2,7 +2,6 @@ package com.wlb.forever.rpc.server.handler;
 
 import com.wlb.forever.rpc.common.protocol.request.HeartBeatRequestPacket;
 import com.wlb.forever.rpc.common.protocol.response.HeartBeatResponsePacket;
-import com.wlb.forever.rpc.server.utils.ServiceUtil;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;

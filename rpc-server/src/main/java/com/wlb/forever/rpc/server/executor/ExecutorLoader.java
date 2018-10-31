@@ -8,6 +8,6 @@ import com.wlb.forever.rpc.common.utils.SpringBeanUtil;
  * @Description:
  */
 public interface ExecutorLoader {
-    ClientRequestExecutor CLIENT_REQUEST_EXECUTOR = (ClientRequestExecutor) SpringBeanUtil.getBean(ClientRequestExecutor.class);
-    ServerResponseExecutor SERVER_RESPONSE_EXECUTOR = (ServerResponseExecutor) SpringBeanUtil.getBean(ServerResponseExecutor.class);
+    ConsumerRequestExecutor CLIENT_REQUEST_EXECUTOR = (ConsumerRequestExecutor) SpringBeanUtil.getBean(ConsumerRequestExecutor.class);
+    ProducerResponseExecutor SERVER_RESPONSE_EXECUTOR = (ProducerResponseExecutor) SpringBeanUtil.getBean(ProducerResponseExecutor.class);
 }

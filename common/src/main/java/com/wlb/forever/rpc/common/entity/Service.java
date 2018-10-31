@@ -1,4 +1,4 @@
-package com.wlb.forever.rpc.server.entity;
+package com.wlb.forever.rpc.common.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,7 +1,7 @@
-package com.wlb.forever.rpc.server.utils;
+package com.wlb.forever.rpc.common.utils;
 
-import com.wlb.forever.rpc.server.attritube.Attributes;
-import com.wlb.forever.rpc.server.entity.Service;
+import com.wlb.forever.rpc.common.attritube.Attributes;
+import com.wlb.forever.rpc.common.entity.Service;
 import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
 
@@ -92,6 +92,14 @@ public class ServiceUtil {
 
         if (serviceMap.containsKey(serviceName)) {
             return new ArrayList<>(serviceMap.get(serviceName).values());
+        } else {
+            return null;
+        }
+    }
+
+    public static List<String> getChannelsServiceId(String serviceName) {
+        if (serviceMap.containsKey(serviceName)) {
+            return new ArrayList<>(serviceMap.get(serviceName).keySet());
         } else {
             return null;
         }

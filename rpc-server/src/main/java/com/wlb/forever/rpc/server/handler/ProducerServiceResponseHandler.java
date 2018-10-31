@@ -2,7 +2,7 @@ package com.wlb.forever.rpc.server.handler;
 
 import com.wlb.forever.rpc.common.protocol.response.ProducerServiceResponsePacket;
 import com.wlb.forever.rpc.server.executor.ExecutorLoader;
-import com.wlb.forever.rpc.server.executor.ServerResponseExecutor;
+import com.wlb.forever.rpc.server.executor.ProducerResponseExecutor;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -25,8 +25,8 @@ public class ProducerServiceResponseHandler extends SimpleChannelInboundHandler<
 
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, ProducerServiceResponsePacket producerServiceResponsePacket) throws Exception {
-        ServerResponseExecutor serverResponseExecutor = ExecutorLoader.SERVER_RESPONSE_EXECUTOR;
-        serverResponseExecutor.executeTask(channelHandlerContext, producerServiceResponsePacket);
+        ProducerResponseExecutor producerResponseExecutor = ExecutorLoader.SERVER_RESPONSE_EXECUTOR;
+        producerResponseExecutor.executeTask(channelHandlerContext, producerServiceResponsePacket);
     }
 
 }

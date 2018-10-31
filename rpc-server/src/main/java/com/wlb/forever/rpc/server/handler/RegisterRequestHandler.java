@@ -2,8 +2,8 @@ package com.wlb.forever.rpc.server.handler;
 
 import com.wlb.forever.rpc.common.protocol.request.RegisterServerRequestPacket;
 import com.wlb.forever.rpc.common.protocol.response.RegisterServerResponsePacket;
-import com.wlb.forever.rpc.server.entity.Service;
-import com.wlb.forever.rpc.server.utils.ServiceUtil;
+import com.wlb.forever.rpc.common.entity.Service;
+import com.wlb.forever.rpc.common.utils.ServiceUtil;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;

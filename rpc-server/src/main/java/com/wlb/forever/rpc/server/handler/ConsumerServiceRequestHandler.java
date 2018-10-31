@@ -3,7 +3,7 @@ package com.wlb.forever.rpc.server.handler;
 import com.wlb.forever.rpc.common.entity.RpcResponseInfo;
 import com.wlb.forever.rpc.common.protocol.request.ConsumerServiceRequestPacket;
 import com.wlb.forever.rpc.common.protocol.response.ConsumerServiceResponsePacket;
-import com.wlb.forever.rpc.server.executor.ClientRequestExecutor;
+import com.wlb.forever.rpc.server.executor.ConsumerRequestExecutor;
 import com.wlb.forever.rpc.server.executor.ExecutorLoader;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
@@ -32,8 +32,8 @@ public class ConsumerServiceRequestHandler extends SimpleChannelInboundHandler<C
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, ConsumerServiceRequestPacket consumerServiceRequestPacket) throws Exception {
 
         try {
-            ClientRequestExecutor clientRequestExecutor = ExecutorLoader.CLIENT_REQUEST_EXECUTOR;
-            clientRequestExecutor.executeTask(channelHandlerContext, consumerServiceRequestPacket);
+            ConsumerRequestExecutor consumerRequestExecutor = ExecutorLoader.CLIENT_REQUEST_EXECUTOR;
+            consumerRequestExecutor.executeTask(channelHandlerContext, consumerServiceRequestPacket);
         } catch (Exception e) {
             ConsumerServiceResponsePacket consumerServiceResponsePacket = new ConsumerServiceResponsePacket();
             RpcResponseInfo rpcResponseInfo = new RpcResponseInfo();

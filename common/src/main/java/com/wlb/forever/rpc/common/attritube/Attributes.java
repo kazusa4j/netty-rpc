@@ -1,6 +1,6 @@
-package com.wlb.forever.rpc.server.attritube;
+package com.wlb.forever.rpc.common.attritube;
 
-import com.wlb.forever.rpc.server.entity.Service;
+import com.wlb.forever.rpc.common.entity.Service;
 import io.netty.util.AttributeKey;
 
 /**

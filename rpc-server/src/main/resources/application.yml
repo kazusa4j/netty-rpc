@@ -14,6 +14,8 @@ wlb:
   rpc:
     server:
       port: 11211
+      balance:
+        cache: JDK
 
 logging:
   level:
