@@ -15,7 +15,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * @Description:
  */
 @Slf4j
-public abstract class AbstractRpcCallerIntf implements RpcCallerIntf {
+public abstract class AbstractRpcCaller implements RpcCallerIntf {
     protected Lock lock = new ReentrantLock();
     protected Condition finish = lock.newCondition();
     protected ConsumerServiceResponsePacket response;

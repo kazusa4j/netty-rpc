@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
  * @Description:发送RPC请求包,并返回请求结果
  */
 @Slf4j
-public class RpcCaller extends AbstractRpcCallerIntf {
+public class RpcCaller extends AbstractRpcCaller {
 
     public RpcCaller() {
     }
@@ -28,7 +28,7 @@ public class RpcCaller extends AbstractRpcCallerIntf {
         try {
             ConsumerServiceResponseHandler.messageMap.put(consumerServiceRequestPacket.getRpcRequestInfo().getRequestId(), this);
             RpcClientStarter.channel.writeAndFlush(consumerServiceRequestPacket);
-            log.info("发送RPC请求");
+            //log.info("发送RPC请求");
             lock.lock();
             await();
             if (this.response != null) {

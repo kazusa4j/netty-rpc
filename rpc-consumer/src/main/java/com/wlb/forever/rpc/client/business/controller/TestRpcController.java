@@ -3,10 +3,12 @@ package com.wlb.forever.rpc.client.business.controller;
 import com.wlb.forever.rpc.client.business.entity.User;
 import com.wlb.forever.rpc.client.business.service.UserService;
 import com.wlb.forever.rpc.common.entity.JsonResult;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -19,13 +21,14 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class TestRpcController {
     @Autowired
-    private UserService rpcTestService;
+    private UserService userService;
 
-    @RequestMapping("/test")
+    @ApiOperation("获取用户")
+    @RequestMapping(value = "/test",method = {RequestMethod.POST, RequestMethod.GET})
     public ResponseEntity<JsonResult> test() {
         JsonResult jr = new JsonResult();
         try {
-            User user = rpcTestService.getUser();
+            User user = userService.getUser();
             jr.setResult(user);
             return ResponseEntity.ok(jr);
         } catch (Exception e) {
@@ -36,11 +39,11 @@ public class TestRpcController {
         }
     }
 
-    @RequestMapping("/test2")
+    @RequestMapping(value = "/test2", method = {RequestMethod.POST, RequestMethod.GET})
     public ResponseEntity<JsonResult> test2() {
         JsonResult jr = new JsonResult();
         try {
-            User user = rpcTestService.getUser("11", "22");
+            User user = userService.getUser("11", "22");
             jr.setResult(user);
             return ResponseEntity.ok(jr);
         } catch (Exception e) {
@@ -51,11 +54,27 @@ public class TestRpcController {
         }
     }
 
-    @RequestMapping("/getBeans")
+    @RequestMapping(value = "/getBeans", method = {RequestMethod.POST, RequestMethod.GET})
     public ResponseEntity<JsonResult> getBeans() {
         JsonResult jr = new JsonResult();
         try {
-            rpcTestService.getBeans();
+            userService.getBeans();
+            jr.setResult(null);
+            return ResponseEntity.ok(jr);
+        } catch (Exception e) {
+            e.printStackTrace();
+            jr.setStatus(-1);
+            jr.setDesc("出现异常");
+            return ResponseEntity.ok(jr);
+        }
+    }
+
+    @ApiOperation("添加用户")
+    @RequestMapping(value = "/save", method = {RequestMethod.POST, RequestMethod.GET})
+    public ResponseEntity<JsonResult> save(User user) {
+        JsonResult jr = new JsonResult();
+        try {
+            userService.save(user);
             jr.setResult(null);
             return ResponseEntity.ok(jr);
         } catch (Exception e) {

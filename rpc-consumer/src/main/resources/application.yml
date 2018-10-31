@@ -2,6 +2,9 @@
 spring:
   application:
     name: rpc-consumer
+  jackson:
+      date-format: yyyy-MM-dd HH:mm:ss
+      time-zone: GMT+8
 server:
   port: 8002
 swagger:
@@ -16,7 +19,7 @@ wlb:
   rpc:
     enable: true
     common:
-      encode: HESSIAN
+      encode: JSON
 
     client:
       servicename: consumer

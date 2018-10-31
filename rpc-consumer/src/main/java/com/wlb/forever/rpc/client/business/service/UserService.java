@@ -18,4 +18,6 @@ public interface UserService {
     User getUser(String a, String b);
 
     User getUser(String a);
+
+    void save(User user) throws Exception;
 }

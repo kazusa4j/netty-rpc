@@ -1,5 +1,6 @@
 package com.wlb.forever.rpc.client.executor;
 
+import com.wlb.forever.rpc.client.exception.RpcProducerException;
 import com.wlb.forever.rpc.client.utils.RpcBeanUtil;
 import com.wlb.forever.rpc.common.entity.RpcRequestInfo;
 import com.wlb.forever.rpc.common.entity.RpcResponseInfo;
@@ -45,57 +46,92 @@ public class MessageSendExecutor {
         String fromServiceName = rpcRequestInfo.getFromServiceName();
         String beanName = rpcRequestInfo.getBeanName();
         String methodName = rpcRequestInfo.getMethodName();
-        Class[] classzz = rpcRequestInfo.getParamTypes();
-        Object[] params = rpcRequestInfo.getParams();
+        String[] classzz = rpcRequestInfo.getParamTypes();
+        byte[][] params = rpcRequestInfo.getParams();
         ProducerServiceResponsePacket producerServiceResponsePacket = assemRpcResponsePacket(requestId, fromServiceId, fromServiceName, beanName, methodName, classzz, params);
         channelHandlerContext.writeAndFlush(producerServiceResponsePacket);
         log.info("返回{}RPC调用服务结果", fromServiceName);
     }
 
     /**
+     * 获取参数类型
+     *
+     * @param paramTypeNames
+     * @return
+     * @throws Exception
+     */
+    private Class[] getParamTypes(String[] paramTypeNames) throws Exception {
+        Class[] paramTypes = new Class[paramTypeNames.length];
+        int i = 0;
+        for (String paramTypeName : paramTypeNames) {
+            paramTypes[i] = Class.forName(paramTypeName);
+            i++;
+        }
+        return paramTypes;
+    }
+
+    private Object[] getArgs(Class[] classes, byte[][] params) {
+        if (classes.length != params.length) {
+            throw new RpcProducerException("参数类型与参数量不符");
+        }
+        Object[] args = new Object[classes.length];
+        int i = 0;
+        for (byte[] param : params) {
+            args[i] = HessianUtil.deserialize(classes[i], param);
+        }
+        return args;
+    }
+
+    /**
      * 组装RPC调用返回包
      *
      * @param requestId
+     * @param fromServiceId
      * @param fromServiceName
      * @param beanName
      * @param methodName
-     * @param classzz
+     * @param classNames
      * @param params
      * @return
      */
-    private ProducerServiceResponsePacket assemRpcResponsePacket(String requestId, String fromServiceId, String fromServiceName, String beanName, String methodName, Class[] classzz, Object[] params) {
+    private ProducerServiceResponsePacket assemRpcResponsePacket(String requestId, String fromServiceId, String fromServiceName, String beanName, String methodName, String[] classNames, byte[][] params) {
         ProducerServiceResponsePacket producerServiceResponsePacket = new ProducerServiceResponsePacket();
-        RpcResponseInfo rpcResponseInfo=new RpcResponseInfo();
+        StringBuilder desc = new StringBuilder();
+        Integer code = SUCCESS;
+        RpcResponseInfo rpcResponseInfo = new RpcResponseInfo();
         rpcResponseInfo.setFromServiceId(fromServiceId);
         rpcResponseInfo.setFromServiceName(fromServiceName);
         rpcResponseInfo.setRequestId(requestId);
-        Object bean = RpcBeanUtil.getRpcBean(beanName, methodName, classzz);
+        try {
+            Class[] classzz = getParamTypes(classNames);
+            Object bean = RpcBeanUtil.getRpcBean(beanName, methodName, classzz);
+            if (bean != null) {
+                Method mh = ReflectionUtils.findMethod(bean.getClass(), methodName, classzz);
+                if (mh == null) {
+                    code = NO_METHOD;
+                    setNoMethodDesc(desc, beanName, methodName, classNames);
+                } else {
 
-        StringBuilder desc = new StringBuilder();
-        Integer code = SUCCESS;
-        if (bean != null) {
-            Method mh = ReflectionUtils.findMethod(bean.getClass(), methodName, classzz);
-            if (mh == null) {
-                code = NO_METHOD;
-                setNoMethodDesc(desc, beanName, methodName, classzz);
-            } else {
-                try {
-                    Object result = ReflectionUtils.invokeMethod(mh, bean, params);
-                    setSuccessDesc(desc, beanName, methodName, classzz);
+                    Object[] args = getArgs(classzz, params);
+                    Object result = ReflectionUtils.invokeMethod(mh, bean, args);
+                    if (result != null) {
+                        rpcResponseInfo.setResult(HessianUtil.serializer(result));
+                    }
+                    setSuccessDesc(desc, beanName, methodName, classNames);
                     rpcResponseInfo.setCode(code);
                     rpcResponseInfo.setDesc(desc.toString());
-                    rpcResponseInfo.setResult(HessianUtil.serializer(result));
-                    log.info(desc.toString());
                     producerServiceResponsePacket.setRpcResponseInfo(rpcResponseInfo);
+                    log.info(desc.toString());
                     return producerServiceResponsePacket;
-                } catch (Exception e) {
-                    code = SERVICE_EXCEPTION;
-                    setExceptionDesc(desc, beanName, methodName, classzz);
+
                 }
+            } else {
+                code = NO_BEAN;
+                setNoBeanDesc(desc, beanName);
             }
-        } else {
-            code = NO_BEAN;
-            setNoBeanDesc(desc, beanName);
+        } catch (Exception e) {
+            code = SERVICE_EXCEPTION;
+            setExceptionDesc(desc, beanName, methodName, classNames);
         }
         log.error(desc.toString());
         rpcResponseInfo.setCode(code);
@@ -112,7 +148,7 @@ public class MessageSendExecutor {
      * @param methodName
      * @param classzz
      */
-    private void setSuccessDesc(StringBuilder desc, String beanName, String methodName, Class[] classzz) {
+    private void setSuccessDesc(StringBuilder desc, String beanName, String methodName, String[] classzz) {
         desc.append("RPC调用");
         desc.append(beanName);
         desc.append(".");
@@ -142,7 +178,7 @@ public class MessageSendExecutor {
      * @param methodName
      * @param classzz
      */
-    private void setNoMethodDesc(StringBuilder desc, String beanName, String methodName, Class[] classzz) {
+    private void setNoMethodDesc(StringBuilder desc, String beanName, String methodName, String[] classzz) {
         desc.append("RPC调用bean:");
         desc.append(beanName);
         desc.append("不存在方法:");
@@ -160,7 +196,7 @@ public class MessageSendExecutor {
      * @param methodName
      * @param classzz
      */
-    private void setExceptionDesc(StringBuilder desc, String beanName, String methodName, Class[] classzz) {
+    private void setExceptionDesc(StringBuilder desc, String beanName, String methodName, String[] classzz) {
         desc.append("RPC调用");
         desc.append(beanName);
         desc.append(".");
@@ -177,10 +213,10 @@ public class MessageSendExecutor {
      * @param desc
      * @param classzz
      */
-    private void setParamTypes(StringBuilder desc, Class[] classzz) {
+    private void setParamTypes(StringBuilder desc, String[] classzz) {
         if (classzz.length > 0) {
-            for (Class classz : classzz) {
-                desc.append(classz.getSimpleName());
+            for (String classz : classzz) {
+                desc.append(classz);
                 desc.append(",");
             }
             desc.deleteCharAt(desc.length() - 1);

@@ -54,6 +54,7 @@ public class RpcServerStarter {
                         ch.pipeline().addLast(HeartBeatRequestHandler.INSTANCE);
                         //RPC服务handler
                         ch.pipeline().addLast(RPCServerHandler.INSTANCE);
+
                     }
                 });
         bind(serverBootstrap, nettyPort);

@@ -11,5 +11,8 @@ import com.wlb.forever.rpc.client.business.entity.User;
 public interface UserService {
 
     User getUser();
+
     void getBeans();
+
+    void save(User user) throws Exception;
 }

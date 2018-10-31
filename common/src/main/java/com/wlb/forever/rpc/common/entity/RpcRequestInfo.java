@@ -22,6 +22,6 @@ public class RpcRequestInfo implements Serializable {
     private String fromServiceName;
     private String beanName;
     private String methodName;
-    private Class[] paramTypes;
-    private Object[] params;
+    private String[] paramTypes;
+    private byte[][] params;
 }

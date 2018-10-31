@@ -31,5 +31,10 @@ public class UserServiceImpl implements UserService {
         SpringBeanUtil.printAllBeans();
     }
 
+    @Override
+    public void save(User user) throws Exception {
+        System.out.println(user.getName());
+    }
+
 
 }
