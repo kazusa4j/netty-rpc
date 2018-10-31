@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
  * @Description:RPC通用配置
  */
 @Component
-public class RpcCommonUtil {
+public class RpcCommonConfig {
     /**
      * RPC包编码设置，支持JSON,HESSIAN
      */

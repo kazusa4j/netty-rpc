@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -23,9 +24,10 @@ public class User implements Serializable {
     private static final long serialVersionUID = 1481161726302269330L;
     @ApiModelProperty(required = true, value = "id", example = "1")
     private Integer id;
+    @NotNull(message = "id 不能为空")
     @ApiModelProperty(required = true, value = "name", example = "william")
     private String name;
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @ApiModelProperty(required = true, value = "createTime", example = "2018-01-01 00:00:00")
-    private Date createTime;
+    @ApiModelProperty(value = "createTime", example = "2018-01-01 00:00:00")
+    private Date createTime = new Date();
 }

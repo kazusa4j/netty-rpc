@@ -6,7 +6,7 @@ import com.wlb.forever.rpc.common.entity.RpcRequestInfo;
 import com.wlb.forever.rpc.common.entity.RpcResponseInfo;
 import com.wlb.forever.rpc.common.protocol.request.ProducerServiceRequestPacket;
 import com.wlb.forever.rpc.common.protocol.response.ProducerServiceResponsePacket;
-import com.wlb.forever.rpc.common.utils.HessianUtil;
+import com.wlb.forever.rpc.common.utils.RpcSerializerUtil;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +41,7 @@ public class MessageSendExecutor {
     public void send(ProducerServiceRequestPacket producerServiceRequestPacket, ChannelHandlerContext channelHandlerContext) {
         //checkAvtiveThreadNum();
         RpcRequestInfo rpcRequestInfo = producerServiceRequestPacket.getRpcRequestInfo();
+        String encode = rpcRequestInfo.getEncode();
         String requestId = rpcRequestInfo.getRequestId();
         String fromServiceId = rpcRequestInfo.getFromServiceId();
         String fromServiceName = rpcRequestInfo.getFromServiceName();
@@ -48,7 +49,7 @@ public class MessageSendExecutor {
         String methodName = rpcRequestInfo.getMethodName();
         String[] classzz = rpcRequestInfo.getParamTypes();
         byte[][] params = rpcRequestInfo.getParams();
-        ProducerServiceResponsePacket producerServiceResponsePacket = assemRpcResponsePacket(requestId, fromServiceId, fromServiceName, beanName, methodName, classzz, params);
+        ProducerServiceResponsePacket producerServiceResponsePacket = assemRpcResponsePacket(encode, requestId, fromServiceId, fromServiceName, beanName, methodName, classzz, params);
         channelHandlerContext.writeAndFlush(producerServiceResponsePacket);
         log.info("返回{}RPC调用服务结果", fromServiceName);
     }
@@ -70,14 +71,14 @@ public class MessageSendExecutor {
         return paramTypes;
     }
 
-    private Object[] getArgs(Class[] classes, byte[][] params) {
+    private Object[] getArgs(Class[] classes, byte[][] params, String encode) {
         if (classes.length != params.length) {
             throw new RpcProducerException("参数类型与参数量不符");
         }
         Object[] args = new Object[classes.length];
         int i = 0;
         for (byte[] param : params) {
-            args[i] = HessianUtil.deserialize(classes[i], param);
+            args[i] = RpcSerializerUtil.deserializer(classes[i], param, encode);
         }
         return args;
     }
@@ -94,7 +95,7 @@ public class MessageSendExecutor {
      * @param params
      * @return
      */
-    private ProducerServiceResponsePacket assemRpcResponsePacket(String requestId, String fromServiceId, String fromServiceName, String beanName, String methodName, String[] classNames, byte[][] params) {
+    private ProducerServiceResponsePacket assemRpcResponsePacket(String encode, String requestId, String fromServiceId, String fromServiceName, String beanName, String methodName, String[] classNames, byte[][] params) {
         ProducerServiceResponsePacket producerServiceResponsePacket = new ProducerServiceResponsePacket();
         StringBuilder desc = new StringBuilder();
         Integer code = SUCCESS;
@@ -112,10 +113,10 @@ public class MessageSendExecutor {
                     setNoMethodDesc(desc, beanName, methodName, classNames);
                 } else {
 
-                    Object[] args = getArgs(classzz, params);
+                    Object[] args = getArgs(classzz, params, encode);
                     Object result = ReflectionUtils.invokeMethod(mh, bean, args);
                     if (result != null) {
-                        rpcResponseInfo.setResult(HessianUtil.serializer(result));
+                        rpcResponseInfo.setResult(RpcSerializerUtil.serializer(result,encode));
                     }
                     setSuccessDesc(desc, beanName, methodName, classNames);
                     rpcResponseInfo.setCode(code);

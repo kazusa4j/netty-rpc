@@ -1,6 +1,6 @@
 package com.wlb.forever.rpc.common.protocol;
 
-import com.wlb.forever.rpc.common.config.RpcCommonUtil;
+import com.wlb.forever.rpc.common.config.RpcCommonConfig;
 import com.wlb.forever.rpc.common.protocol.request.ConsumerServiceRequestPacket;
 import com.wlb.forever.rpc.common.protocol.request.HeartBeatRequestPacket;
 import com.wlb.forever.rpc.common.protocol.request.RegisterServerRequestPacket;
@@ -106,7 +106,7 @@ public class PacketCodec {
 
 
     private static Serializer getDefaultSerializer() {
-        switch (RpcCommonUtil.ENCODE) {
+        switch (RpcCommonConfig.ENCODE) {
             case "JSON":
                 return new JSONSerializer();
             case "HESSIAN":

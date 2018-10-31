@@ -1,11 +1,11 @@
 package com.wlb.forever.rpc.client.call;
 
 import com.wlb.forever.rpc.client.RpcClientStarter;
-import com.wlb.forever.rpc.client.exception.RpcCallClientException;
+import com.wlb.forever.rpc.client.exception.RpcConsumerException;
 import com.wlb.forever.rpc.client.handler.ConsumerServiceResponseHandler;
 import com.wlb.forever.rpc.common.entity.RpcResponseInfo;
 import com.wlb.forever.rpc.common.protocol.request.ConsumerServiceRequestPacket;
-import com.wlb.forever.rpc.common.utils.HessianUtil;
+import com.wlb.forever.rpc.common.utils.RpcSerializerUtil;
 import lombok.extern.slf4j.Slf4j;
 
 
@@ -23,7 +23,7 @@ public class RpcCaller extends AbstractRpcCaller {
     @Override
     public <T> T getResult(ConsumerServiceRequestPacket consumerServiceRequestPacket, Class<T> clazz) {
         if (RpcClientStarter.channel == null || !RpcClientStarter.channel.isActive()) {
-            throw new RpcCallClientException("RPC服务器无法连接");
+            throw new RpcConsumerException("RPC服务器无法连接");
         }
         try {
             ConsumerServiceResponseHandler.messageMap.put(consumerServiceRequestPacket.getRpcRequestInfo().getRequestId(), this);
@@ -36,15 +36,15 @@ public class RpcCaller extends AbstractRpcCaller {
                 Integer code = responseInfo.getCode();
                 if (code == 0) {
                     if (responseInfo.getResult() != null) {
-                        return HessianUtil.deserialize(clazz, responseInfo.getResult());
+                        return RpcSerializerUtil.deserializer(clazz, responseInfo.getResult());
                     } else {
                         return null;
                     }
                 } else {
-                    throw new RpcCallClientException(responseInfo.getDesc());
+                    throw new RpcConsumerException(responseInfo.getDesc());
                 }
             } else {
-                throw new RpcCallClientException("RPC调用没有收到返回");
+                throw new RpcConsumerException("RPC调用没有收到返回");
             }
         } finally {
             ConsumerServiceResponseHandler.clearOverRequest(consumerServiceRequestPacket.getRpcRequestInfo().getRequestId());

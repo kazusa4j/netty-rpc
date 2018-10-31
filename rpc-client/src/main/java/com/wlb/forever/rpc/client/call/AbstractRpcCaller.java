@@ -1,6 +1,6 @@
 package com.wlb.forever.rpc.client.call;
 
-import com.wlb.forever.rpc.client.exception.RpcCallClientException;
+import com.wlb.forever.rpc.client.exception.RpcConsumerException;
 import com.wlb.forever.rpc.common.protocol.response.ConsumerServiceResponsePacket;
 import lombok.extern.slf4j.Slf4j;
 
@@ -36,11 +36,11 @@ public abstract class AbstractRpcCaller implements RpcCallerIntf {
             timeout = finish.await(30 * 1000L, TimeUnit.MILLISECONDS);
         } catch (InterruptedException e) {
             log.error("RPC请求发生中断故障异常");
-            throw new RpcCallClientException("RPC请求发生中断故障异常");
+            throw new RpcConsumerException("RPC请求发生中断故障异常");
         }
         if (!timeout) {
             log.error("RPC请求超时");
-            throw new RpcCallClientException("RPC请求超时");
+            throw new RpcConsumerException("RPC请求超时");
         }
     }
 

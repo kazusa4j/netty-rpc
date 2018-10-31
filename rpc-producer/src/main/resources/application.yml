@@ -16,6 +16,8 @@ logging:
 wlb:
   rpc:
     enable: true
+    common:
+      encode: HESSIAN
     client:
       servicename: producer
       aways-retry: true
