@@ -1,14 +1,15 @@
 package com.wlb.forever.rpc.server.executor;
 
+import com.wlb.forever.rpc.common.entity.RpcRequestInfo;
 import com.wlb.forever.rpc.common.entity.RpcResponseInfo;
 import com.wlb.forever.rpc.common.protocol.Packet;
 import com.wlb.forever.rpc.common.protocol.request.ConsumerServiceRequestPacket;
 import com.wlb.forever.rpc.common.protocol.request.ProducerServiceRequestPacket;
 import com.wlb.forever.rpc.common.protocol.response.ConsumerServiceResponsePacket;
-import com.wlb.forever.rpc.server.balance.BalanceMode;
+import com.wlb.forever.rpc.common.server.balance.BalanceMode;
 import com.wlb.forever.rpc.server.balance.cache.BalanceModeCache;
 import com.wlb.forever.rpc.server.config.RpcServerConfig;
-import com.wlb.forever.rpc.server.utils.BalanceUtil;
+import com.wlb.forever.rpc.server.balance.utils.BalanceUtil;
 import com.wlb.forever.rpc.common.utils.ServiceUtil;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
@@ -52,15 +53,23 @@ public class ConsumerRequestExecutor {
             ch.writeAndFlush(consumerServiceResponsePacket);
         } else {
             ProducerServiceRequestPacket producerServiceRequestPacket = new ProducerServiceRequestPacket();
-            producerServiceRequestPacket.setRpcRequestInfo(consumerServiceRequestPacket.getRpcRequestInfo());
-            BalanceMode balanceMode = BalanceUtil.getBalanceMode(RpcServerConfig.BALANCE_MODE, ch.channel(), serviceIds);
-            if (balanceMode == null) {
+            RpcRequestInfo rpcRequestInfo = consumerServiceRequestPacket.getRpcRequestInfo();
+            producerServiceRequestPacket.setRpcRequestInfo(rpcRequestInfo);
+            if (RpcServerConfig.BALANCE_ENABLE) {
+                BalanceMode balanceMode = BalanceUtil.getBalanceMode(RpcServerConfig.BALANCE_MODE, rpcRequestInfo.getFromServiceId(), rpcRequestInfo.getFromServiceName(), serviceIds);
+                if (balanceMode == null) {
+                    List<Channel> channels = ServiceUtil.getChannels(consumerServiceRequestPacket.getRpcRequestInfo().getToServiceName());
+                    channels.forEach(channel -> channel.writeAndFlush(producerServiceRequestPacket));
+                } else {
+                    balanceMode.requestProducer(producerServiceRequestPacket);
+                    balanceModeCache.put(producerServiceRequestPacket.getRpcRequestInfo().getRequestId(), balanceMode);
+                }
+            } else {
                 List<Channel> channels = ServiceUtil.getChannels(consumerServiceRequestPacket.getRpcRequestInfo().getToServiceName());
                 channels.forEach(channel -> channel.writeAndFlush(producerServiceRequestPacket));
-            } else {
-                balanceMode.requestProducer(producerServiceRequestPacket);
-                balanceModeCache.put(producerServiceRequestPacket.getRpcRequestInfo().getRequestId(), balanceMode);
             }
         }
     }
+
+
 }

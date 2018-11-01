@@ -15,7 +15,10 @@ wlb:
     server:
       port: 11211
       balance:
+        enable: true
         cache: JDK
+        mode: FASTESTSUCCESS
+
 
 logging:
   level:

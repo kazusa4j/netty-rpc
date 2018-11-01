@@ -1,6 +1,6 @@
 package com.wlb.forever.rpc.server.balance.cache;
 
-import com.wlb.forever.rpc.server.balance.BalanceMode;
+import com.wlb.forever.rpc.common.server.balance.BalanceMode;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

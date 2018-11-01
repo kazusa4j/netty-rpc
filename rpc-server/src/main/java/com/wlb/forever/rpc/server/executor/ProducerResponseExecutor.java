@@ -1,16 +1,17 @@
 package com.wlb.forever.rpc.server.executor;
 
+import com.wlb.forever.rpc.common.entity.Service;
 import com.wlb.forever.rpc.common.protocol.Packet;
 import com.wlb.forever.rpc.common.protocol.response.ConsumerServiceResponsePacket;
 import com.wlb.forever.rpc.common.protocol.response.ProducerServiceResponsePacket;
-import com.wlb.forever.rpc.server.balance.BalanceMode;
+import com.wlb.forever.rpc.common.server.balance.BalanceMode;
 import com.wlb.forever.rpc.server.balance.cache.BalanceModeCache;
 import com.wlb.forever.rpc.common.utils.ServiceUtil;
+import com.wlb.forever.rpc.server.config.RpcServerConfig;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
@@ -35,10 +36,16 @@ public class ProducerResponseExecutor {
         ConsumerServiceResponsePacket consumerServiceResponsePacket = new ConsumerServiceResponsePacket();
         consumerServiceResponsePacket.setRpcResponseInfo(producerServiceResponsePacket.getRpcResponseInfo());
         String requestId = producerServiceResponsePacket.getRpcResponseInfo().getRequestId();
-        BalanceMode balanceMode = balanceModeCache.getBalanceMode(requestId);
-        if (balanceMode != null) {
-            if (balanceMode.responseConsumer(ch.channel(), consumerServiceResponsePacket)) {
-                balanceModeCache.removeBalanceMode(requestId);
+        if (RpcServerConfig.BALANCE_ENABLE) {
+            BalanceMode balanceMode = balanceModeCache.getBalanceMode(requestId);
+            if (balanceMode != null) {
+                Service service = ServiceUtil.getService(ch.channel());
+                if (service == null) {
+                    return;
+                }
+                if (balanceMode.responseConsumer(service.getServiceId(), consumerServiceResponsePacket)) {
+                    balanceModeCache.removeBalanceMode(requestId);
+                }
             }
         } else {
             Channel channel = ServiceUtil.getChannel(producerServiceResponsePacket.getRpcResponseInfo().getFromServiceId(), producerServiceResponsePacket.getRpcResponseInfo().getFromServiceName());
@@ -46,6 +53,5 @@ public class ProducerResponseExecutor {
                 channel.writeAndFlush(consumerServiceResponsePacket);
             }
         }
-
     }
 }

@@ -1,8 +1,7 @@
-package com.wlb.forever.rpc.server.balance;
+package com.wlb.forever.rpc.common.server.balance;
 
 import com.wlb.forever.rpc.common.protocol.request.ProducerServiceRequestPacket;
 import com.wlb.forever.rpc.common.protocol.response.ConsumerServiceResponsePacket;
-import io.netty.channel.Channel;
 
 
 /**
@@ -13,5 +12,5 @@ import io.netty.channel.Channel;
 public interface BalanceMode {
     void requestProducer(ProducerServiceRequestPacket producerServiceRequestPacket);
 
-    boolean responseConsumer(Channel channel, ConsumerServiceResponsePacket consumerServiceResponsePacket);
+    boolean responseConsumer(String serviceId, ConsumerServiceResponsePacket consumerServiceResponsePacket);
 }
