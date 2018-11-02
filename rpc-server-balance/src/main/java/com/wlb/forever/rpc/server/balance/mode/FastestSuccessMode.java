@@ -1,5 +1,6 @@
 package com.wlb.forever.rpc.server.balance.mode;
 
+import com.wlb.forever.rpc.common.entity.Service;
 import com.wlb.forever.rpc.server.balance.AbstractBalanceMode;
 import com.wlb.forever.rpc.server.balance.requestproducer.entire.RequestEntireProducer;
 import com.wlb.forever.rpc.server.balance.responseconsumer.impl.FastestSuccessResponseConsumer;
@@ -12,8 +13,8 @@ import java.util.List;
  * @Description:
  */
 public class FastestSuccessMode extends AbstractBalanceMode {
-    public FastestSuccessMode(String consumerServiceId, String consumerServiceName, List<String> producerServiceIds) {
-        super(consumerServiceId, consumerServiceName, producerServiceIds);
+    public FastestSuccessMode(Service consumerService, List<Service> producerServices) {
+        super(consumerService, producerServices);
         requestProducer = RequestEntireProducer.getInstance();
         responseConsumer = FastestSuccessResponseConsumer.getInstance();
     }

@@ -1,9 +1,9 @@
 package com.wlb.forever.rpc.server.balance.requestproducer.entire;
 
+import com.wlb.forever.rpc.common.entity.Service;
 import com.wlb.forever.rpc.common.protocol.request.ProducerServiceRequestPacket;
 import com.wlb.forever.rpc.common.utils.ServiceUtil;
 import com.wlb.forever.rpc.server.balance.requestproducer.RequestProducer;
-import com.wlb.forever.rpc.server.balance.responseconsumer.impl.FastestResponseConsumer;
 import io.netty.channel.Channel;
 
 import java.util.List;
@@ -27,10 +27,10 @@ public class RequestEntireProducer implements RequestProducer {
     }
 
     @Override
-    public void requestProducer(List<String> serviceList, ProducerServiceRequestPacket producerServiceRequestPacket) {
-        String toServiceName = producerServiceRequestPacket.getRpcRequestInfo().getToServiceName();
-        serviceList.forEach(serviceId -> {
-            Channel channel = ServiceUtil.getChannel(serviceId, toServiceName);
+    public void requestProducer(List<Service> pruducerServices, ProducerServiceRequestPacket producerServiceRequestPacket) {
+        String toServiceName = producerServiceRequestPacket.getRpcRequestInfo().getProducerServiceName();
+        pruducerServices.forEach(service -> {
+            Channel channel = ServiceUtil.getChannel(service, toServiceName);
             channel.writeAndFlush(producerServiceRequestPacket);
         });
     }

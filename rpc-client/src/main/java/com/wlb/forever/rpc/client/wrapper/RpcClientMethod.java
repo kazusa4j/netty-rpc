@@ -3,6 +3,7 @@ package com.wlb.forever.rpc.client.wrapper;
 import com.wlb.forever.rpc.client.RpcClientStarter;
 import com.wlb.forever.rpc.client.call.RpcCaller;
 import com.wlb.forever.rpc.common.entity.RpcRequestInfo;
+import com.wlb.forever.rpc.common.entity.Service;
 import com.wlb.forever.rpc.common.protocol.request.ConsumerServiceRequestPacket;
 import com.wlb.forever.rpc.common.utils.RpcSerializerUtil;
 import com.wlb.forever.rpc.common.utils.UniqueIdUtil;
@@ -42,9 +43,8 @@ public class RpcClientMethod {
         RpcRequestInfo rpcRequestInfo = new RpcRequestInfo();
         String requestId = UniqueIdUtil.getUUID();
         rpcRequestInfo.setRequestId(requestId);
-        rpcRequestInfo.setToServiceName(serviceName);
-        rpcRequestInfo.setFromServiceId(RpcClientStarter.SERVICE_ID);
-        rpcRequestInfo.setFromServiceName(RpcClientStarter.SERVICE_NAME);
+        rpcRequestInfo.setProducerServiceName(serviceName);
+        rpcRequestInfo.setConsumerService(new Service(RpcClientStarter.SERVICE_ID, RpcClientStarter.SERVICE_NAME, ""));
         rpcRequestInfo.setBeanName(beanName);
         rpcRequestInfo.setMethodName(method.methodName);
         rpcRequestInfo.setParamTypes(getParamTypeNames(method.paramTypes));
@@ -55,7 +55,6 @@ public class RpcClientMethod {
     }
 
     /**
-     *
      * @param classes
      * @return
      */

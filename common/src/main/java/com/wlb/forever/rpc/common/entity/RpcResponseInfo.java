@@ -17,8 +17,7 @@ import java.io.Serializable;
 public class RpcResponseInfo implements Serializable {
     private static final long serialVersionUID = -3730811428883162419L;
     private String requestId;
-    private String fromServiceId;
-    private String fromServiceName;
+    private Service consumerService;
     private Integer code = 0;
     private String desc = "";
     private byte[] result;

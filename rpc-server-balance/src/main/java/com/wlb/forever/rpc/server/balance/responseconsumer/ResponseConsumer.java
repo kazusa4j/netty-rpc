@@ -1,5 +1,6 @@
 package com.wlb.forever.rpc.server.balance.responseconsumer;
 
+import com.wlb.forever.rpc.common.entity.Service;
 import com.wlb.forever.rpc.common.protocol.response.ConsumerServiceResponsePacket;
 
 import java.util.List;
@@ -10,5 +11,5 @@ import java.util.List;
  * @Description:
  */
 public interface ResponseConsumer {
-    boolean responseConsumer(String consumerServiceId, String consumerServiceName, String producerServiceId, List<String> serviceList, ConsumerServiceResponsePacket consumerServiceResponsePacket);
+    boolean responseConsumer(Service consumerService, String producerServiceId, List<Service> producerServices, ConsumerServiceResponsePacket consumerServiceResponsePacket);
 }

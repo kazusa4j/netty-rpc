@@ -1,5 +1,6 @@
 package com.wlb.forever.rpc.server.balance.requestproducer;
 
+import com.wlb.forever.rpc.common.entity.Service;
 import com.wlb.forever.rpc.common.protocol.request.ProducerServiceRequestPacket;
 
 import java.util.List;
@@ -10,5 +11,5 @@ import java.util.List;
  * @Description:
  */
 public interface RequestProducer {
-    void requestProducer(List<String> serviceList, ProducerServiceRequestPacket producerServiceRequestPacket);
+    void requestProducer(List<Service> producerServices, ProducerServiceRequestPacket producerServiceRequestPacket);
 }

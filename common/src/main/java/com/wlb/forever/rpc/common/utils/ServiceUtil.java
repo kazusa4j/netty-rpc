@@ -15,7 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Slf4j
 public class ServiceUtil {
-    private static final Map<String, Map<String, Channel>> serviceMap = new ConcurrentHashMap<>();
+    private static final Map<String, Map<Service, Channel>> serviceMap = new ConcurrentHashMap<>();
 
     /**
      * 注册服务
@@ -26,10 +26,10 @@ public class ServiceUtil {
     public static void bindService(Service service, Channel channel) {
         synchronized (serviceMap) {
             if (serviceMap.containsKey(service.getServiceName())) {
-                serviceMap.get(service.getServiceName()).put(service.getServiceId(), channel);
+                serviceMap.get(service.getServiceName()).put(service, channel);
             } else {
-                Map<String, Channel> map = new LinkedHashMap<>();
-                map.put(service.getServiceId(), channel);
+                Map<Service, Channel> map = new LinkedHashMap<>();
+                map.put(service, channel);
                 serviceMap.put(service.getServiceName(), map);
             }
         }
@@ -46,7 +46,7 @@ public class ServiceUtil {
     public static void unBindService(Channel channel) {
         Service service = getService(channel);
         if (service != null) {
-            serviceMap.get(service.getServiceName()).remove(service.getServiceId());
+            serviceMap.get(service.getServiceName()).remove(service);
             channel.attr(Attributes.SERVICE).set(null);
             log.info(service.getServiceName() + " 服务注销!");
         }
@@ -69,14 +69,14 @@ public class ServiceUtil {
     /**
      * 根据服务名服务ID获取channel
      *
-     * @param serviceId
+     * @param service
      * @param serviceName
      * @return
      */
-    public static Channel getChannel(String serviceId, String serviceName) {
+    public static Channel getChannel(Service service, String serviceName) {
 
         if (serviceMap.containsKey(serviceName)) {
-            return serviceMap.get(serviceName).get(serviceId);
+            return serviceMap.get(serviceName).get(service);
         } else {
             return null;
         }
@@ -97,11 +97,25 @@ public class ServiceUtil {
         }
     }
 
-    public static List<String> getChannelsServiceId(String serviceName) {
+    /**
+     * 根据服务名获取服务Services
+     *
+     * @param serviceName
+     * @return
+     */
+    public static List<Service> getChannelsServiceId(String serviceName) {
         if (serviceMap.containsKey(serviceName)) {
             return new ArrayList<>(serviceMap.get(serviceName).keySet());
         } else {
             return null;
         }
+    }
+
+    public static List<String> getServiceIdsByServices(List<Service> services) {
+        List<String> serviceIds = new ArrayList<>();
+        services.forEach(service -> {
+            serviceIds.add(service.getServiceId());
+        });
+        return serviceIds;
     }
 }

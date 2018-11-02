@@ -17,7 +17,7 @@ wlb:
       balance:
         enable: true
         cache: JDK
-        mode: FASTESTSUCCESS
+        mode: RANDOM
 
 
 logging:

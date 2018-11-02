@@ -4,6 +4,7 @@ import com.wlb.forever.rpc.client.exception.RpcProducerException;
 import com.wlb.forever.rpc.client.utils.RpcBeanUtil;
 import com.wlb.forever.rpc.common.entity.RpcRequestInfo;
 import com.wlb.forever.rpc.common.entity.RpcResponseInfo;
+import com.wlb.forever.rpc.common.entity.Service;
 import com.wlb.forever.rpc.common.protocol.request.ProducerServiceRequestPacket;
 import com.wlb.forever.rpc.common.protocol.response.ProducerServiceResponsePacket;
 import com.wlb.forever.rpc.common.utils.RpcSerializerUtil;
@@ -43,15 +44,14 @@ public class MessageSendExecutor {
         RpcRequestInfo rpcRequestInfo = producerServiceRequestPacket.getRpcRequestInfo();
         String encode = rpcRequestInfo.getEncode();
         String requestId = rpcRequestInfo.getRequestId();
-        String fromServiceId = rpcRequestInfo.getFromServiceId();
-        String fromServiceName = rpcRequestInfo.getFromServiceName();
+        Service consumerService = rpcRequestInfo.getConsumerService();
         String beanName = rpcRequestInfo.getBeanName();
         String methodName = rpcRequestInfo.getMethodName();
         String[] classzz = rpcRequestInfo.getParamTypes();
         byte[][] params = rpcRequestInfo.getParams();
-        ProducerServiceResponsePacket producerServiceResponsePacket = assemRpcResponsePacket(encode, requestId, fromServiceId, fromServiceName, beanName, methodName, classzz, params);
+        ProducerServiceResponsePacket producerServiceResponsePacket = assemRpcResponsePacket(encode, requestId, consumerService, beanName, methodName, classzz, params);
         channelHandlerContext.writeAndFlush(producerServiceResponsePacket);
-        log.info("返回{}RPC调用服务结果", fromServiceName);
+        log.info("返回{}RPC调用服务结果", consumerService.getServiceName());
     }
 
     /**
@@ -87,21 +87,19 @@ public class MessageSendExecutor {
      * 组装RPC调用返回包
      *
      * @param requestId
-     * @param fromServiceId
-     * @param fromServiceName
+     * @param consumerService
      * @param beanName
      * @param methodName
      * @param classNames
      * @param params
      * @return
      */
-    private ProducerServiceResponsePacket assemRpcResponsePacket(String encode, String requestId, String fromServiceId, String fromServiceName, String beanName, String methodName, String[] classNames, byte[][] params) {
+    private ProducerServiceResponsePacket assemRpcResponsePacket(String encode, String requestId, Service consumerService, String beanName, String methodName, String[] classNames, byte[][] params) {
         ProducerServiceResponsePacket producerServiceResponsePacket = new ProducerServiceResponsePacket();
         StringBuilder desc = new StringBuilder();
         Integer code = SUCCESS;
         RpcResponseInfo rpcResponseInfo = new RpcResponseInfo();
-        rpcResponseInfo.setFromServiceId(fromServiceId);
-        rpcResponseInfo.setFromServiceName(fromServiceName);
+        rpcResponseInfo.setConsumerService(consumerService);
         rpcResponseInfo.setRequestId(requestId);
         try {
             Class[] classzz = getParamTypes(classNames);

@@ -19,9 +19,8 @@ public class RpcRequestInfo implements Serializable {
     private static final long serialVersionUID = -6828549150415093442L;
     private String encode = RpcCommonConfig.ENCODE;
     private String requestId;
-    private String toServiceName;
-    private String fromServiceId;
-    private String fromServiceName;
+    private String producerServiceName;
+    private Service consumerService;
     private String beanName;
     private String methodName;
     private String[] paramTypes;

@@ -25,9 +25,7 @@ public class RegisterRequestHandler extends SimpleChannelInboundHandler<Register
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, RegisterServerRequestPacket registerServerRequestPacket) throws Exception {
         registerServerRequestPacket.setVersion(registerServerRequestPacket.getVersion());
-        Service service = new Service();
-        service.setServiceId(registerServerRequestPacket.getServiceId());
-        service.setServiceName(registerServerRequestPacket.getServiceName());
+        Service service = registerServerRequestPacket.getService();
         //注册服务
         ServiceUtil.bindService(service, channelHandlerContext.channel());
         RegisterServerResponsePacket registerServerResponsePacket = new RegisterServerResponsePacket();

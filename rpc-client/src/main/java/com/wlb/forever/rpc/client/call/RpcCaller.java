@@ -28,7 +28,7 @@ public class RpcCaller extends AbstractRpcCaller {
         try {
             ConsumerServiceResponseHandler.messageMap.put(consumerServiceRequestPacket.getRpcRequestInfo().getRequestId(), this);
             RpcClientStarter.channel.writeAndFlush(consumerServiceRequestPacket);
-            //log.info("发送RPC请求");
+            log.info("发送RPC请求--"+System.currentTimeMillis());
             lock.lock();
             await();
             if (this.response != null) {

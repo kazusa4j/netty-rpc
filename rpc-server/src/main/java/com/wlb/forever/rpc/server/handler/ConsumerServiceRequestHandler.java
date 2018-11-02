@@ -43,7 +43,7 @@ public class ConsumerServiceRequestHandler extends SimpleChannelInboundHandler<C
             rpcResponseInfo.setResult(null);
             consumerServiceResponsePacket.setRpcResponseInfo(rpcResponseInfo);
             channelHandlerContext.writeAndFlush(consumerServiceResponsePacket);
-            log.warn("{}调用{}的RPC服务出现异常", consumerServiceRequestPacket.getRpcRequestInfo().getFromServiceName(), consumerServiceRequestPacket.getRpcRequestInfo().getToServiceName());
+            log.warn("{}调用{}的RPC服务出现异常", consumerServiceRequestPacket.getRpcRequestInfo().getConsumerService().getServiceName(), consumerServiceRequestPacket.getRpcRequestInfo().getProducerServiceName());
         }
 
     }

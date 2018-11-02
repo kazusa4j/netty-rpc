@@ -1,6 +1,7 @@
 package com.wlb.forever.rpc.server.balance.responseconsumer.impl;
 
 import com.wlb.forever.rpc.common.constant.RpcResponseCode;
+import com.wlb.forever.rpc.common.entity.Service;
 import com.wlb.forever.rpc.common.protocol.response.ConsumerServiceResponsePacket;
 import com.wlb.forever.rpc.common.utils.ServiceUtil;
 import com.wlb.forever.rpc.server.balance.responseconsumer.ResponseConsumer;
@@ -30,7 +31,8 @@ public class FastestSuccessResponseConsumer implements ResponseConsumer {
 
 
     @Override
-    public boolean responseConsumer(String consumerServiceId, String consumerServiceName, String producerServiceId,List<String> serviceList, ConsumerServiceResponsePacket consumerServiceResponsePacket) {
+    public boolean responseConsumer(Service consumerService, String producerServiceId, List<Service> producerServices, ConsumerServiceResponsePacket consumerServiceResponsePacket) {
+        List<String> serviceList = ServiceUtil.getServiceIdsByServices(producerServices);
         if (!serviceList.contains(producerServiceId)) {
             log.error("返回请求结果，服务生产者CHANNEL不匹配");
             return false;
@@ -43,7 +45,7 @@ public class FastestSuccessResponseConsumer implements ResponseConsumer {
                 return true;
             }
         }
-        Channel channel = ServiceUtil.getChannel(consumerServiceId, consumerServiceName);
+        Channel channel = ServiceUtil.getChannel(consumerService, consumerService.getServiceName());
         if (channel != null && channel.isActive()) {
             channel.writeAndFlush(consumerServiceResponsePacket);
         }

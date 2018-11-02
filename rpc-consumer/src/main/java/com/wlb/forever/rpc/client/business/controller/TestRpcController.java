@@ -1,6 +1,7 @@
 package com.wlb.forever.rpc.client.business.controller;
 
 import com.wlb.forever.rpc.client.business.entity.User;
+import com.wlb.forever.rpc.client.business.service.RpcTest2Service;
 import com.wlb.forever.rpc.client.business.service.UserService;
 import com.wlb.forever.rpc.common.entity.JsonResult;
 import io.swagger.annotations.ApiOperation;
@@ -23,8 +24,11 @@ public class TestRpcController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private RpcTest2Service rpcTest2Service;
+
     @ApiOperation("获取用户")
-    @RequestMapping(value = "/test",method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(value = "/test", method = {RequestMethod.POST, RequestMethod.GET})
     public ResponseEntity<JsonResult> test() {
         JsonResult jr = new JsonResult();
         try {
@@ -43,7 +47,7 @@ public class TestRpcController {
     public ResponseEntity<JsonResult> test2() {
         JsonResult jr = new JsonResult();
         try {
-            User user = userService.getUser("11", "22");
+            User user = userService.getUser("13331", "22222");
             jr.setResult(user);
             return ResponseEntity.ok(jr);
         } catch (Exception e) {
@@ -58,7 +62,7 @@ public class TestRpcController {
     public ResponseEntity<JsonResult> getBeans() {
         JsonResult jr = new JsonResult();
         try {
-            userService.getBeans();
+            rpcTest2Service.getUser();
             jr.setResult(null);
             return ResponseEntity.ok(jr);
         } catch (Exception e) {

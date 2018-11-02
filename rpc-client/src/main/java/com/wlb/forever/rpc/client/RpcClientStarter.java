@@ -4,6 +4,7 @@ import com.wlb.forever.rpc.client.handler.ConsumerServiceResponseHandler;
 import com.wlb.forever.rpc.client.handler.HeartBeatTimerHandler;
 import com.wlb.forever.rpc.client.handler.ProducerServiceRequestHandler;
 import com.wlb.forever.rpc.client.handler.RpcClientHandler;
+import com.wlb.forever.rpc.common.entity.Service;
 import com.wlb.forever.rpc.common.handler.PacketCodecHandler;
 import com.wlb.forever.rpc.common.handler.RPCIdleStateHandler;
 import com.wlb.forever.rpc.common.handler.UnPacketHandler;
@@ -148,7 +149,7 @@ public class RpcClientStarter {
                 STATUS = 3;
                 log.info("RPC服务器连接成功");
                 RpcClientStarter.channel = ((ChannelFuture) future).channel();
-                channel.writeAndFlush(new RegisterServerRequestPacket(SERVICE_ID, SERVICE_NAME));
+                channel.writeAndFlush(new RegisterServerRequestPacket(new Service(SERVICE_ID, SERVICE_NAME, "")));
             } else if (retry == 0) {
                 log.info(AWAYS_RETRY_INTERVAL + "秒后尝试重连RPC服务器");
                 if (!AWAYS_RETRY) {

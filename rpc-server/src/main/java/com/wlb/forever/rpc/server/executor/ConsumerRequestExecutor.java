@@ -2,6 +2,7 @@ package com.wlb.forever.rpc.server.executor;
 
 import com.wlb.forever.rpc.common.entity.RpcRequestInfo;
 import com.wlb.forever.rpc.common.entity.RpcResponseInfo;
+import com.wlb.forever.rpc.common.entity.Service;
 import com.wlb.forever.rpc.common.protocol.Packet;
 import com.wlb.forever.rpc.common.protocol.request.ConsumerServiceRequestPacket;
 import com.wlb.forever.rpc.common.protocol.request.ProducerServiceRequestPacket;
@@ -40,14 +41,14 @@ public class ConsumerRequestExecutor {
     @Async(value = "threadPoolClientRequest")
     public void executeTask(ChannelHandlerContext ch, Packet packet) {
         ConsumerServiceRequestPacket consumerServiceRequestPacket = (ConsumerServiceRequestPacket) packet;
-        List<String> serviceIds = ServiceUtil.getChannelsServiceId(consumerServiceRequestPacket.getRpcRequestInfo().getToServiceName());
-        if (serviceIds == null || serviceIds.size() <= 0) {
-            log.warn("RPC服务({})不存在", consumerServiceRequestPacket.getRpcRequestInfo().getToServiceName());
+        List<Service> producerServices = ServiceUtil.getChannelsServiceId(consumerServiceRequestPacket.getRpcRequestInfo().getProducerServiceName());
+        if (producerServices == null || producerServices.size() <= 0) {
+            log.warn("RPC服务({})不存在", consumerServiceRequestPacket.getRpcRequestInfo().getProducerServiceName());
             ConsumerServiceResponsePacket consumerServiceResponsePacket = new ConsumerServiceResponsePacket();
             RpcResponseInfo rpcResponseInfo = new RpcResponseInfo();
             rpcResponseInfo.setRequestId(consumerServiceRequestPacket.getRpcRequestInfo().getRequestId());
             rpcResponseInfo.setCode(NO_SERVICE);
-            rpcResponseInfo.setDesc("(" + consumerServiceRequestPacket.getRpcRequestInfo().getToServiceName() + ")RPC服务不存在");
+            rpcResponseInfo.setDesc("(" + consumerServiceRequestPacket.getRpcRequestInfo().getProducerServiceName() + ")RPC服务不存在");
             rpcResponseInfo.setResult(null);
             consumerServiceResponsePacket.setRpcResponseInfo(rpcResponseInfo);
             ch.writeAndFlush(consumerServiceResponsePacket);
@@ -56,16 +57,16 @@ public class ConsumerRequestExecutor {
             RpcRequestInfo rpcRequestInfo = consumerServiceRequestPacket.getRpcRequestInfo();
             producerServiceRequestPacket.setRpcRequestInfo(rpcRequestInfo);
             if (RpcServerConfig.BALANCE_ENABLE) {
-                BalanceMode balanceMode = BalanceUtil.getBalanceMode(RpcServerConfig.BALANCE_MODE, rpcRequestInfo.getFromServiceId(), rpcRequestInfo.getFromServiceName(), serviceIds);
+                BalanceMode balanceMode = BalanceUtil.getBalanceMode(RpcServerConfig.BALANCE_MODE, ServiceUtil.getService(ch.channel()), producerServices);
                 if (balanceMode == null) {
-                    List<Channel> channels = ServiceUtil.getChannels(consumerServiceRequestPacket.getRpcRequestInfo().getToServiceName());
+                    List<Channel> channels = ServiceUtil.getChannels(consumerServiceRequestPacket.getRpcRequestInfo().getProducerServiceName());
                     channels.forEach(channel -> channel.writeAndFlush(producerServiceRequestPacket));
                 } else {
                     balanceMode.requestProducer(producerServiceRequestPacket);
                     balanceModeCache.put(producerServiceRequestPacket.getRpcRequestInfo().getRequestId(), balanceMode);
                 }
             } else {
-                List<Channel> channels = ServiceUtil.getChannels(consumerServiceRequestPacket.getRpcRequestInfo().getToServiceName());
+                List<Channel> channels = ServiceUtil.getChannels(consumerServiceRequestPacket.getRpcRequestInfo().getProducerServiceName());
                 channels.forEach(channel -> channel.writeAndFlush(producerServiceRequestPacket));
             }
         }

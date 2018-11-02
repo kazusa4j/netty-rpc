@@ -31,7 +31,6 @@ public class ProducerResponseExecutor {
 
     @Async(value = "threadPoolServerResponse")
     public void executeTask(ChannelHandlerContext ch, Packet packet) {
-
         ProducerServiceResponsePacket producerServiceResponsePacket = (ProducerServiceResponsePacket) packet;
         ConsumerServiceResponsePacket consumerServiceResponsePacket = new ConsumerServiceResponsePacket();
         consumerServiceResponsePacket.setRpcResponseInfo(producerServiceResponsePacket.getRpcResponseInfo());
@@ -41,6 +40,7 @@ public class ProducerResponseExecutor {
             if (balanceMode != null) {
                 Service service = ServiceUtil.getService(ch.channel());
                 if (service == null) {
+                    log.warn("service为NULL");
                     return;
                 }
                 if (balanceMode.responseConsumer(service.getServiceId(), consumerServiceResponsePacket)) {
@@ -48,7 +48,7 @@ public class ProducerResponseExecutor {
                 }
             }
         } else {
-            Channel channel = ServiceUtil.getChannel(producerServiceResponsePacket.getRpcResponseInfo().getFromServiceId(), producerServiceResponsePacket.getRpcResponseInfo().getFromServiceName());
+            Channel channel = ServiceUtil.getChannel(producerServiceResponsePacket.getRpcResponseInfo().getConsumerService(), producerServiceResponsePacket.getRpcResponseInfo().getConsumerService().getServiceName());
             if (channel != null && channel.isActive()) {
                 channel.writeAndFlush(consumerServiceResponsePacket);
             }
