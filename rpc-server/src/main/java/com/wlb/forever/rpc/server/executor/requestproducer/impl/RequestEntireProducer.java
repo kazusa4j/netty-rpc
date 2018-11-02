@@ -1,9 +1,9 @@
-package com.wlb.forever.rpc.server.balance.requestproducer.entire;
+package com.wlb.forever.rpc.server.executor.requestproducer.impl;
 
 import com.wlb.forever.rpc.common.entity.Service;
 import com.wlb.forever.rpc.common.protocol.request.ProducerServiceRequestPacket;
 import com.wlb.forever.rpc.common.utils.ServiceUtil;
-import com.wlb.forever.rpc.server.balance.requestproducer.RequestProducer;
+import com.wlb.forever.rpc.server.executor.requestproducer.RequestProducer;
 import io.netty.channel.Channel;
 
 import java.util.List;

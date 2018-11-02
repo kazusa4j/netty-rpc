@@ -1,4 +1,4 @@
-package com.wlb.forever.rpc.server.balance.requestproducer;
+package com.wlb.forever.rpc.server.executor.requestproducer;
 
 import com.wlb.forever.rpc.common.entity.Service;
 import com.wlb.forever.rpc.common.protocol.request.ProducerServiceRequestPacket;

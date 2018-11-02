@@ -1,7 +1,7 @@
 package com.wlb.forever.rpc.server.balance.arithmetic.random;
 
 import com.wlb.forever.rpc.common.entity.Service;
-import com.wlb.forever.rpc.server.balance.arithmetic.BalanceArithmetic;
+import com.wlb.forever.rpc.common.balance.BalanceArithmetic;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,16 +12,16 @@ import java.util.Random;
  * @Date: 18/11/2 09:29
  * @Description:
  */
-public class randomArithmetic implements BalanceArithmetic {
-    private randomArithmetic() {
+public class RandomArithmetic implements BalanceArithmetic {
+    private RandomArithmetic() {
 
     }
 
     private static class randomArithmeticHolder {
-        private static final randomArithmetic INSTANCE = new randomArithmetic();
+        private static final RandomArithmetic INSTANCE = new RandomArithmetic();
     }
 
-    public static randomArithmetic getInstance() {
+    public static RandomArithmetic getInstance() {
         return randomArithmeticHolder.INSTANCE;
     }
 

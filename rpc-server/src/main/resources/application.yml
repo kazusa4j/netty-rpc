@@ -14,10 +14,13 @@ wlb:
   rpc:
     server:
       port: 11211
-      balance:
+      execute:
         enable: true
+        factory: CUSTOM
         cache: JDK
         mode: RANDOM
+      balance:
+        arithmetic: true
 
 
 logging:

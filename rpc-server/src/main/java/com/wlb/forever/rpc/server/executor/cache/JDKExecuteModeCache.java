@@ -1,6 +1,6 @@
-package com.wlb.forever.rpc.server.balance.cache;
+package com.wlb.forever.rpc.server.executor.cache;
 
-import com.wlb.forever.rpc.common.server.balance.BalanceMode;
+import com.wlb.forever.rpc.server.executor.mode.ServerRpcExecuteMode;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -10,16 +10,16 @@ import java.util.concurrent.ConcurrentHashMap;
  * @Date: 18/10/31 16:06
  * @Description:
  */
-public class JDKBalanceModeCache implements BalanceModeCache {
-    private static Map<String, BalanceMode> balanceModeMap = new ConcurrentHashMap<>();
+public class JDKExecuteModeCache implements ExecuteModeCache {
+    private static Map<String, ServerRpcExecuteMode> balanceModeMap = new ConcurrentHashMap<>();
 
     @Override
-    public void put(String requestId, BalanceMode balanceMode) {
-        balanceModeMap.put(requestId, balanceMode);
+    public void put(String requestId, ServerRpcExecuteMode serverRpcExecuteMode) {
+        balanceModeMap.put(requestId, serverRpcExecuteMode);
     }
 
     @Override
-    public BalanceMode getBalanceMode(String requestId) {
+    public ServerRpcExecuteMode getBalanceMode(String requestId) {
         synchronized (balanceModeMap) {
             if (!balanceModeMap.containsKey(requestId)) {
                 return null;

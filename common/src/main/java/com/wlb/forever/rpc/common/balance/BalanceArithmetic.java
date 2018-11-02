@@ -1,4 +1,4 @@
-package com.wlb.forever.rpc.server.balance.arithmetic;
+package com.wlb.forever.rpc.common.balance;
 
 import com.wlb.forever.rpc.common.entity.Service;
 

@@ -1,10 +1,10 @@
-package com.wlb.forever.rpc.server.balance.responseconsumer.impl;
+package com.wlb.forever.rpc.server.executor.responseconsumer.impl;
 
 import com.wlb.forever.rpc.common.constant.RpcResponseCode;
 import com.wlb.forever.rpc.common.entity.Service;
 import com.wlb.forever.rpc.common.protocol.response.ConsumerServiceResponsePacket;
 import com.wlb.forever.rpc.common.utils.ServiceUtil;
-import com.wlb.forever.rpc.server.balance.responseconsumer.ResponseConsumer;
+import com.wlb.forever.rpc.server.executor.responseconsumer.ResponseConsumer;
 import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
 
@@ -42,6 +42,10 @@ public class FastestSuccessResponseConsumer implements ResponseConsumer {
             if (serviceList.size() > 0) {
                 return false;
             } else {
+                Channel channel = ServiceUtil.getChannel(consumerService, consumerService.getServiceName());
+                if (channel != null && channel.isActive()) {
+                    channel.writeAndFlush(consumerServiceResponsePacket);
+                }
                 return true;
             }
         }

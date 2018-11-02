@@ -7,12 +7,10 @@ import com.wlb.forever.rpc.common.protocol.Packet;
 import com.wlb.forever.rpc.common.protocol.request.ConsumerServiceRequestPacket;
 import com.wlb.forever.rpc.common.protocol.request.ProducerServiceRequestPacket;
 import com.wlb.forever.rpc.common.protocol.response.ConsumerServiceResponsePacket;
-import com.wlb.forever.rpc.common.server.balance.BalanceMode;
-import com.wlb.forever.rpc.server.balance.cache.BalanceModeCache;
-import com.wlb.forever.rpc.server.config.RpcServerConfig;
-import com.wlb.forever.rpc.server.balance.utils.BalanceUtil;
+import com.wlb.forever.rpc.server.executor.factory.ServerExecuteModeFactory;
+import com.wlb.forever.rpc.server.executor.mode.ServerRpcExecuteMode;
+import com.wlb.forever.rpc.server.executor.cache.ExecuteModeCache;
 import com.wlb.forever.rpc.common.utils.ServiceUtil;
-import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +34,10 @@ public class ConsumerRequestExecutor {
     private ThreadPoolTaskExecutor threadPoolClientRequest;//变量名称为定义的线程池bean定义的name属性名。
 
     @Autowired
-    private BalanceModeCache balanceModeCache;
+    private ExecuteModeCache executeModeCache;
+
+    @Autowired
+    private ServerExecuteModeFactory serverExecuteModeFactory;
 
     @Async(value = "threadPoolClientRequest")
     public void executeTask(ChannelHandlerContext ch, Packet packet) {
@@ -56,19 +57,10 @@ public class ConsumerRequestExecutor {
             ProducerServiceRequestPacket producerServiceRequestPacket = new ProducerServiceRequestPacket();
             RpcRequestInfo rpcRequestInfo = consumerServiceRequestPacket.getRpcRequestInfo();
             producerServiceRequestPacket.setRpcRequestInfo(rpcRequestInfo);
-            if (RpcServerConfig.BALANCE_ENABLE) {
-                BalanceMode balanceMode = BalanceUtil.getBalanceMode(RpcServerConfig.BALANCE_MODE, ServiceUtil.getService(ch.channel()), producerServices);
-                if (balanceMode == null) {
-                    List<Channel> channels = ServiceUtil.getChannels(consumerServiceRequestPacket.getRpcRequestInfo().getProducerServiceName());
-                    channels.forEach(channel -> channel.writeAndFlush(producerServiceRequestPacket));
-                } else {
-                    balanceMode.requestProducer(producerServiceRequestPacket);
-                    balanceModeCache.put(producerServiceRequestPacket.getRpcRequestInfo().getRequestId(), balanceMode);
-                }
-            } else {
-                List<Channel> channels = ServiceUtil.getChannels(consumerServiceRequestPacket.getRpcRequestInfo().getProducerServiceName());
-                channels.forEach(channel -> channel.writeAndFlush(producerServiceRequestPacket));
-            }
+
+            ServerRpcExecuteMode serverRpcExecuteMode = serverExecuteModeFactory.getExecuteMode(ServiceUtil.getService(ch.channel()), producerServices);
+            serverRpcExecuteMode.requestProducer(producerServiceRequestPacket);
+            executeModeCache.put(producerServiceRequestPacket.getRpcRequestInfo().getRequestId(), serverRpcExecuteMode);
         }
     }
 

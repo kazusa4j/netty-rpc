@@ -1,4 +1,4 @@
-package com.wlb.forever.rpc.server.balance.responseconsumer;
+package com.wlb.forever.rpc.server.executor.responseconsumer;
 
 import com.wlb.forever.rpc.common.entity.Service;
 import com.wlb.forever.rpc.common.protocol.response.ConsumerServiceResponsePacket;

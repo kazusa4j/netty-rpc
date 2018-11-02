@@ -15,9 +15,16 @@ public class RpcServerConfig {
      */
     public static boolean BALANCE_ENABLE;
 
-    @Value("${wlb.rpc.server.balance.enable:true}")
+    @Value("${wlb.rpc.server.execute.enable:true}")
     private void setBalanceEnable(boolean balanceEnable) {
         this.BALANCE_ENABLE = balanceEnable;
+    }
+
+    public static String BALANCE_ARITHMETIC;
+
+    @Value("${wlb.rpc.server.execute.balance-arithmetic:RANDOM}")
+    private void setBalanceArithmetic(String balanceArithmetic) {
+        this.BALANCE_ARITHMETIC = balanceArithmetic;
     }
 
     /**
@@ -25,7 +32,7 @@ public class RpcServerConfig {
      */
     public static String BALANCE_MODE;
 
-    @Value("${wlb.rpc.server.balance.mode:NULL}")
+    @Value("${wlb.rpc.server.execute.mode:NULL}")
     private void setBalanceMode(String balanceMode) {
         this.BALANCE_MODE = balanceMode;
     }
