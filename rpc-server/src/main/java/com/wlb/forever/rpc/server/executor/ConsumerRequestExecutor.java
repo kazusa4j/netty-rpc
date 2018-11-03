@@ -21,6 +21,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 import static com.wlb.forever.rpc.common.constant.RpcResponseCode.NO_SERVICE;
+import static com.wlb.forever.rpc.common.constant.RpcResponseCode.SERVER_EXCEPTION;
 
 /**
  * @Auther: william
@@ -54,13 +55,25 @@ public class ConsumerRequestExecutor {
             consumerServiceResponsePacket.setRpcResponseInfo(rpcResponseInfo);
             ch.writeAndFlush(consumerServiceResponsePacket);
         } else {
-            ProducerServiceRequestPacket producerServiceRequestPacket = new ProducerServiceRequestPacket();
-            RpcRequestInfo rpcRequestInfo = consumerServiceRequestPacket.getRpcRequestInfo();
-            producerServiceRequestPacket.setRpcRequestInfo(rpcRequestInfo);
+            try {
+                ProducerServiceRequestPacket producerServiceRequestPacket = new ProducerServiceRequestPacket();
+                RpcRequestInfo rpcRequestInfo = consumerServiceRequestPacket.getRpcRequestInfo();
+                producerServiceRequestPacket.setRpcRequestInfo(rpcRequestInfo);
 
-            ServerRpcExecuteMode serverRpcExecuteMode = serverExecuteModeFactory.getExecuteMode(ServiceUtil.getService(ch.channel()), producerServices);
-            serverRpcExecuteMode.requestProducer(producerServiceRequestPacket);
-            executeModeCache.put(producerServiceRequestPacket.getRpcRequestInfo().getRequestId(), serverRpcExecuteMode);
+                ServerRpcExecuteMode serverRpcExecuteMode = serverExecuteModeFactory.getExecuteMode(ServiceUtil.getService(ch.channel()), producerServices);
+                serverRpcExecuteMode.requestProducer(producerServiceRequestPacket);
+                executeModeCache.put(producerServiceRequestPacket.getRpcRequestInfo().getRequestId(), serverRpcExecuteMode);
+            }catch (Exception e){
+                log.warn("({})RPC调用处理消费者请求发生异常", consumerServiceRequestPacket.getRpcRequestInfo().getConsumerService().getServiceName());
+                ConsumerServiceResponsePacket consumerServiceResponsePacket = new ConsumerServiceResponsePacket();
+                RpcResponseInfo rpcResponseInfo = new RpcResponseInfo();
+                rpcResponseInfo.setRequestId(consumerServiceRequestPacket.getRpcRequestInfo().getRequestId());
+                rpcResponseInfo.setCode(SERVER_EXCEPTION);
+                rpcResponseInfo.setDesc("RPC调用服务器发生异常");
+                rpcResponseInfo.setResult(null);
+                consumerServiceResponsePacket.setRpcResponseInfo(rpcResponseInfo);
+                ch.writeAndFlush(consumerServiceResponsePacket);
+            }
         }
     }
 

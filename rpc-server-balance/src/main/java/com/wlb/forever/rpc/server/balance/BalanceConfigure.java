@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Configuration;
 public class BalanceConfigure {
     @Bean
     @ConditionalOnMissingBean(BalanceArithmeticFactory.class)
-    @ConditionalOnProperty(name = "wlb.rpc.server.balance.arithmetic", havingValue = "true")
+    @ConditionalOnProperty(name = "wlb.rpc.server.balance.enable", havingValue = "true")
     public BalanceArithmeticFactory arithmeticFactory() {
         return new ArithmeticFactory();
     }

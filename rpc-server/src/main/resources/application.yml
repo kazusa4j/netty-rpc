@@ -18,9 +18,9 @@ wlb:
         enable: true
         factory: CUSTOM
         cache: JDK
-        mode: RANDOM
+        balance-arithmetic: ROUND
       balance:
-        arithmetic: true
+        enable: true
 
 
 logging:

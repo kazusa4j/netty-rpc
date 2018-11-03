@@ -45,7 +45,7 @@ public abstract class AbstractServerRpcExecuteMode implements ServerRpcExecuteMo
                 producerServices = balanceArithmetic.filterProducerServices(modeSignature.consumerService, producerServices);
             }
         }
-
+        modeSignature.producerServices=producerServices;
         requestProducer.requestProducer(producerServices, producerServiceRequestPacket);
     }
 

@@ -24,10 +24,10 @@ public class ServiceUtil {
      * @param channel
      */
     public static void bindService(Service service, Channel channel) {
-        synchronized (serviceMap) {
-            if (serviceMap.containsKey(service.getServiceName())) {
-                serviceMap.get(service.getServiceName()).put(service, channel);
-            } else {
+        if (serviceMap.containsKey(service.getServiceName())) {
+            serviceMap.get(service.getServiceName()).put(service, channel);
+        } else {
+            synchronized (serviceMap) {
                 Map<Service, Channel> map = new LinkedHashMap<>();
                 map.put(service, channel);
                 serviceMap.put(service.getServiceName(), map);
@@ -111,11 +111,34 @@ public class ServiceUtil {
         }
     }
 
+    /**
+     * 根据Services获取服务ID列表
+     *
+     * @param services
+     * @return
+     */
     public static List<String> getServiceIdsByServices(List<Service> services) {
         List<String> serviceIds = new ArrayList<>();
         services.forEach(service -> {
             serviceIds.add(service.getServiceId());
         });
         return serviceIds;
+    }
+
+    /**
+     * 获取第一个生产者Service
+     *
+     * @param serviceName
+     * @return
+     */
+    public static Service getService(String serviceName) {
+        if (serviceMap.containsKey(serviceName)) {
+            if (!serviceMap.get(serviceName).isEmpty()) {
+                for (Service service : serviceMap.get(serviceName).keySet()) {
+                    return service;
+                }
+            }
+        }
+        return null;
     }
 }
