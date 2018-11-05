@@ -26,6 +26,7 @@
         <module>rpc-client</module>
         <module>rpc-producer2</module>
         <module>rpc-server-balance</module>
+        <module>configcenter</module>
     </modules>
     <packaging>pom</packaging>
 

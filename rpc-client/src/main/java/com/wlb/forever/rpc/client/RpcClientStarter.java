@@ -149,7 +149,6 @@ public class RpcClientStarter {
                 STATUS = 3;
                 log.info("RPC服务器连接成功");
                 RpcClientStarter.channel = ((ChannelFuture) future).channel();
-                log.error(SERVICE_IP);
                 channel.writeAndFlush(new RegisterServerRequestPacket(RpcClientConfig.SERVICE));
             } else if (retry == 0) {
                 log.info(AWAYS_RETRY_INTERVAL + "秒后尝试重连RPC服务器");
