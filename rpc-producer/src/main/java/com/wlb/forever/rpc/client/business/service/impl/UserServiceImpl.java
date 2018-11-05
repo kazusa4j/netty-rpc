@@ -3,6 +3,7 @@ package com.wlb.forever.rpc.client.business.service.impl;
 import com.wlb.forever.rpc.client.business.entity.User;
 import com.wlb.forever.rpc.client.business.service.UserService;
 import com.wlb.forever.rpc.common.utils.SpringBeanUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -13,6 +14,7 @@ import java.util.Date;
  * @Description:
  */
 @Service
+@Slf4j
 public class UserServiceImpl implements UserService {
     public static Integer userid = 0;
 
@@ -28,6 +30,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUser(String a, String b) {
+        System.out.println("==="+b+"===");
         User user = new User();
         user.setId(a.hashCode());
         user.setName("b");

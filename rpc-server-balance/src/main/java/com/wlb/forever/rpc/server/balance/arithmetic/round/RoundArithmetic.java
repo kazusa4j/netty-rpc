@@ -25,12 +25,12 @@ public class RoundArithmetic implements BalanceArithmetic {
 
     }
 
-    private static class roundArithmeticHolder {
+    private static class RoundArithmeticHolder {
         private static final RoundArithmetic INSTANCE = new RoundArithmetic();
     }
 
     public static RoundArithmetic getInstance() {
-        return roundArithmeticHolder.INSTANCE;
+        return RoundArithmeticHolder.INSTANCE;
     }
 
     @Override

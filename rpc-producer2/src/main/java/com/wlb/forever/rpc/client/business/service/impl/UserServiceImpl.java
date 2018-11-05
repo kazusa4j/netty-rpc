@@ -22,4 +22,14 @@ public class UserServiceImpl implements UserService {
         user.setCreateTime(new Date());
         return user;
     }
+
+    @Override
+    public User getUser(String a, String b) {
+        System.out.println("==="+b+"===");
+        User user = new User();
+        user.setId(a.hashCode());
+        user.setName(b);
+        user.setCreateTime(new Date());
+        return user;
+    }
 }

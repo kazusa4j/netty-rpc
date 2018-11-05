@@ -10,5 +10,5 @@ import java.util.List;
 public interface BalanceArithmeticFactory {
     BalanceArithmetic getArithmetic(String arithmeticName);
 
-    List<BalanceArithmetic> getArithmetics(String[] arithmeticNames);
+    List<BalanceArithmetic> getArithmetics();
 }

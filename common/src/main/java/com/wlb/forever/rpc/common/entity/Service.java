@@ -19,4 +19,5 @@ public class Service implements Serializable {
     private String serviceId;
     private String serviceName;
     private String serviceType;
+    private String ip;
 }

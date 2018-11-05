@@ -20,12 +20,7 @@ public class RpcServerConfig {
         this.BALANCE_ENABLE = balanceEnable;
     }
 
-    public static String BALANCE_ARITHMETIC;
 
-    @Value("${wlb.rpc.server.execute.balance-arithmetic:RANDOM}")
-    private void setBalanceArithmetic(String balanceArithmetic) {
-        this.BALANCE_ARITHMETIC = balanceArithmetic;
-    }
 
     /**
      * 负载均衡模式设置

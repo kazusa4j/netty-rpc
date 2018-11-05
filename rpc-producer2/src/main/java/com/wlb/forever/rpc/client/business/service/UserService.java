@@ -11,4 +11,6 @@ import com.wlb.forever.rpc.client.business.entity.User;
 public interface UserService {
 
     User getUser();
+
+    User getUser(String a,String b);
 }

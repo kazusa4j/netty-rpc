@@ -8,7 +8,6 @@ import com.wlb.forever.rpc.client.business.entity.User;
  * @Date: 18/10/23 11:10
  * @Description:
  */
-@RpcClient(serviceName = "producer")
 public interface RpcTest2Service {
     User getUser() throws Exception;
 

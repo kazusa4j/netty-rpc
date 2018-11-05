@@ -1,7 +1,7 @@
 package com.wlb.forever.rpc.server.balance;
 
 import com.wlb.forever.rpc.common.balance.BalanceArithmeticFactory;
-import com.wlb.forever.rpc.server.balance.arithmetic.ArithmeticFactory;
+import com.wlb.forever.rpc.server.balance.config.ArithmeticLoader;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -18,6 +18,6 @@ public class BalanceConfigure {
     @ConditionalOnMissingBean(BalanceArithmeticFactory.class)
     @ConditionalOnProperty(name = "wlb.rpc.server.balance.enable", havingValue = "true")
     public BalanceArithmeticFactory arithmeticFactory() {
-        return new ArithmeticFactory();
+        return new ArithmeticLoader();
     }
 }

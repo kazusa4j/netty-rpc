@@ -19,12 +19,12 @@ public class RandomArithmetic implements BalanceArithmetic {
 
     }
 
-    private static class randomArithmeticHolder {
+    private static class RandomArithmeticHolder {
         private static final RandomArithmetic INSTANCE = new RandomArithmetic();
     }
 
     public static RandomArithmetic getInstance() {
-        return randomArithmeticHolder.INSTANCE;
+        return RandomArithmeticHolder.INSTANCE;
     }
 
     @Override

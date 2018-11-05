@@ -64,6 +64,7 @@ public class ConsumerRequestExecutor {
                 serverRpcExecuteMode.requestProducer(producerServiceRequestPacket);
                 executeModeCache.put(producerServiceRequestPacket.getRpcRequestInfo().getRequestId(), serverRpcExecuteMode);
             }catch (Exception e){
+                e.printStackTrace();
                 log.warn("({})RPC调用处理消费者请求发生异常", consumerServiceRequestPacket.getRpcRequestInfo().getConsumerService().getServiceName());
                 ConsumerServiceResponsePacket consumerServiceResponsePacket = new ConsumerServiceResponsePacket();
                 RpcResponseInfo rpcResponseInfo = new RpcResponseInfo();

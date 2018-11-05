@@ -1,14 +1,13 @@
 package com.wlb.forever.rpc.client;
 
-import com.wlb.forever.rpc.client.handler.ConsumerServiceResponseHandler;
+import com.wlb.forever.rpc.client.config.RpcClientConfig;
 import com.wlb.forever.rpc.client.handler.HeartBeatTimerHandler;
-import com.wlb.forever.rpc.client.handler.ProducerServiceRequestHandler;
 import com.wlb.forever.rpc.client.handler.RpcClientHandler;
-import com.wlb.forever.rpc.common.entity.Service;
 import com.wlb.forever.rpc.common.handler.PacketCodecHandler;
 import com.wlb.forever.rpc.common.handler.RPCIdleStateHandler;
 import com.wlb.forever.rpc.common.handler.UnPacketHandler;
 import com.wlb.forever.rpc.common.protocol.request.RegisterServerRequestPacket;
+import com.wlb.forever.rpc.common.utils.LocalUtil;
 import com.wlb.forever.rpc.common.utils.UniqueIdUtil;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
@@ -62,6 +61,7 @@ public class RpcClientStarter {
      * 客户端配置
      */
     public static final String SERVICE_ID = UniqueIdUtil.getUUID();
+    public static final String SERVICE_IP = LocalUtil.getLocalIp();
 
     public static String SERVICE_NAME;
     private static int INIT_RETRY_TIME;
@@ -149,7 +149,8 @@ public class RpcClientStarter {
                 STATUS = 3;
                 log.info("RPC服务器连接成功");
                 RpcClientStarter.channel = ((ChannelFuture) future).channel();
-                channel.writeAndFlush(new RegisterServerRequestPacket(new Service(SERVICE_ID, SERVICE_NAME, "")));
+                log.error(SERVICE_IP);
+                channel.writeAndFlush(new RegisterServerRequestPacket(RpcClientConfig.SERVICE));
             } else if (retry == 0) {
                 log.info(AWAYS_RETRY_INTERVAL + "秒后尝试重连RPC服务器");
                 if (!AWAYS_RETRY) {

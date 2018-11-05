@@ -11,7 +11,7 @@ netty:
     port: 11211
 logging:
   level:
-    root: info
+    root: warn
 
 wlb:
   rpc:
