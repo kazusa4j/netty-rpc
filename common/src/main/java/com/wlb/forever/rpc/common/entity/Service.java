@@ -3,6 +3,7 @@ package com.wlb.forever.rpc.common.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.io.Serializable;
 
@@ -12,6 +13,7 @@ import java.io.Serializable;
  * @Description: 服务对象
  */
 @Data
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 public class Service implements Serializable {

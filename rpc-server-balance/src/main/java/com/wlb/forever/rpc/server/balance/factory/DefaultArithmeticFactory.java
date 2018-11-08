@@ -1,11 +1,13 @@
-package com.wlb.forever.rpc.server.balance.config;
+package com.wlb.forever.rpc.server.balance.factory;
 
 import com.wlb.forever.rpc.common.balance.BalanceArithmetic;
 import com.wlb.forever.rpc.common.balance.BalanceArithmeticFactory;
 import com.wlb.forever.rpc.common.utils.StringUtil;
+import com.wlb.forever.rpc.server.balance.arithmetic.nothing.NullArithmetic;
 import com.wlb.forever.rpc.server.balance.arithmetic.iphash.IpHashArithmetic;
 import com.wlb.forever.rpc.server.balance.arithmetic.random.RandomArithmetic;
 import com.wlb.forever.rpc.server.balance.arithmetic.round.RoundArithmetic;
+import com.wlb.forever.rpc.server.balance.config.ArithmeticConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +17,7 @@ import java.util.List;
  * @Date: 18/11/2 17:23
  * @Description:
  */
-public class ArithmeticLoader implements BalanceArithmeticFactory {
+public class DefaultArithmeticFactory implements BalanceArithmeticFactory {
     /**
      * 获取负载均衡算法
      *
@@ -32,7 +34,7 @@ public class ArithmeticLoader implements BalanceArithmeticFactory {
             case "IP_HASH":
                 return IpHashArithmetic.getInstance();
             default:
-                return null;
+                return NullArithmetic.getInstance();
         }
     }
 

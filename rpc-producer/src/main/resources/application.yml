@@ -19,12 +19,12 @@ wlb:
     common:
       encode: HESSIAN
     client:
-      servicename: producer
+      service-name: producer
       aways-retry: true
       aways-retry-interval: 60
       init-retry-time: 5
 
     server:
-      ip: 127.0.0.1
+      host: 127.0.0.1
       port: 11211
 

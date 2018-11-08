@@ -27,6 +27,7 @@
         <module>rpc-producer2</module>
         <module>rpc-server-balance</module>
         <module>configcenter</module>
+        <module>test</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -109,6 +110,12 @@
             <groupId>com.caucho</groupId>
             <artifactId>hessian</artifactId>
             <version>4.0.38</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
         </dependency>
     </dependencies>
 

@@ -1,9 +1,8 @@
 package com.wlb.forever.rpc.client.config;
 
-import com.wlb.forever.rpc.common.entity.Service;
-import static com.wlb.forever.rpc.client.RpcClientStarter.SERVICE_IP;
-import static com.wlb.forever.rpc.client.RpcClientStarter.SERVICE_ID;
-import static com.wlb.forever.rpc.client.RpcClientStarter.SERVICE_NAME;
+import lombok.Data;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
 
 /**
@@ -11,7 +10,23 @@ import static com.wlb.forever.rpc.client.RpcClientStarter.SERVICE_NAME;
  * @Date: 18/10/25 14:52
  * @Description: RPC 客户端配置
  */
+
+@Data
+@Component
+@ConfigurationProperties(prefix = "wlb.rpc.client")
 public class RpcClientConfig {
-    public static final Service SERVICE=new Service(SERVICE_ID,SERVICE_NAME,"",SERVICE_IP);
+    private int initRetryTime=5;
+    private Boolean awaysRetry=true;
+    private int awaysRetryInterval=60;
+
+    private static String serviceName;
+
+    public void setServiceName(String serviceName) {
+        RpcClientConfig.serviceName = serviceName;
+    }
+
+    public static String getServiceName() {
+        return RpcClientConfig.serviceName;
+    }
 
 }

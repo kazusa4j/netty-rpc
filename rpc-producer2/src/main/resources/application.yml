@@ -16,12 +16,6 @@ wlb:
   rpc:
     enable: true
     client:
-      servicename: producer
-      aways-retry: true
-      aways-retry-interval: 60
-      init-retry-time: 5
+      service-name: producer
 
-    server:
-      ip: 127.0.0.1
-      port: 11211
 

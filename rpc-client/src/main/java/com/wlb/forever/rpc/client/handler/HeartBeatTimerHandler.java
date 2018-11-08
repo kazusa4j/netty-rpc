@@ -2,6 +2,7 @@ package com.wlb.forever.rpc.client.handler;
 
 import com.wlb.forever.rpc.client.RpcClientStarter;
 import com.wlb.forever.rpc.common.protocol.request.HeartBeatRequestPacket;
+import com.wlb.forever.rpc.common.utils.SpringBeanUtil;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +34,8 @@ public class HeartBeatTimerHandler extends ChannelInboundHandlerAdapter {
         if (RpcClientStarter.STATUS == 3) {
             RpcClientStarter.STATUS = 1;
             log.error("与RPC服务起连接断开，开始重连");
-            RpcClientStarter.start();
+            RpcClientStarter rpcClientStarter = SpringBeanUtil.getBean(RpcClientStarter.class);
+            rpcClientStarter.start();
         }
     }
 }

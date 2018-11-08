@@ -57,12 +57,14 @@ public class RoundArithmetic implements BalanceArithmetic {
                     }
                 }
             }
-            if (!hasGetMap) {
-                map = new LinkedHashMap<>(16, 0.75f, true);
-                for (Service service : producerServices) {
-                    map.put(service, 0);
+            synchronized (roundMap) {
+                if (!hasGetMap) {
+                    map = new LinkedHashMap<>(16, 0.75f, true);
+                    for (Service service : producerServices) {
+                        map.put(service, 0);
+                    }
+                    list.add(map);
                 }
-                list.add(map);
             }
         } else {
             synchronized (roundMap) {

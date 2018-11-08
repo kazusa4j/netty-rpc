@@ -35,7 +35,7 @@ public abstract class AbstractServerRpcExecuteMode implements ServerRpcExecuteMo
      * @param producerServiceRequestPacket
      */
     @Override
-    public void requestProducer(ProducerServiceRequestPacket producerServiceRequestPacket) {
+    public final void requestProducer(ProducerServiceRequestPacket producerServiceRequestPacket) {
         List<Service> producerServices = modeSignature.producerServices;
         if (producerServices.size() > 1) {
             for (BalanceArithmetic balanceArithmetic : balanceArithmeticList) {
@@ -45,7 +45,6 @@ public abstract class AbstractServerRpcExecuteMode implements ServerRpcExecuteMo
                 producerServices = balanceArithmetic.filterProducerServices(modeSignature.consumerService, producerServices);
             }
         }
-        modeSignature.producerServices=producerServices;
         requestProducer.requestProducer(producerServices, producerServiceRequestPacket);
     }
 
@@ -57,7 +56,7 @@ public abstract class AbstractServerRpcExecuteMode implements ServerRpcExecuteMo
      * @return
      */
     @Override
-    public boolean responseConsumer(String serviceId, ConsumerServiceResponsePacket consumerServiceResponsePacket) {
+    public final boolean responseConsumer(String serviceId, ConsumerServiceResponsePacket consumerServiceResponsePacket) {
 
         return responseConsumer.responseConsumer(modeSignature.getConsumerService(), serviceId, modeSignature.getProducerServices(), consumerServiceResponsePacket);
     }

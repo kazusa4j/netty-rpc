@@ -9,9 +9,7 @@ server:
   port: 8002
 swagger:
   enable: true
-netty:
-  server:
-    port: 11211
+
 logging:
   level: info
 
@@ -22,11 +20,11 @@ wlb:
       encode: JSON
 
     client:
-      servicename: consumer
+      service-name: consumer
       aways-retry: true
       aways-retry-interval: 60
       init-retry-time: 5
 
     server:
-      ip: 127.0.0.1
+      host: 127.0.0.1
       port: 11211

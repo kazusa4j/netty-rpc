@@ -1,8 +1,10 @@
 package com.wlb.forever.rpc.client;
 
 import com.wlb.forever.rpc.client.config.RpcClientConfig;
+import com.wlb.forever.rpc.client.config.RpcServerConfig;
 import com.wlb.forever.rpc.client.handler.HeartBeatTimerHandler;
 import com.wlb.forever.rpc.client.handler.RpcClientHandler;
+import com.wlb.forever.rpc.common.entity.Service;
 import com.wlb.forever.rpc.common.handler.PacketCodecHandler;
 import com.wlb.forever.rpc.common.handler.RPCIdleStateHandler;
 import com.wlb.forever.rpc.common.handler.UnPacketHandler;
@@ -19,12 +21,14 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
+
 
 /**
  * @Auther: william
@@ -33,68 +37,27 @@ import java.util.concurrent.TimeUnit;
  */
 @Component
 @Slf4j
-@Data
 public class RpcClientStarter {
 
     public static volatile int STATUS = 1;//1:未连接；2:连接中;3:已连接
     private static NioEventLoopGroup workerGroup;
     private static Bootstrap bootstrap;
     public static Channel channel;
+    @Autowired
+    private RpcServerConfig rpcServerConfig;
+    @Autowired
+    private RpcClientConfig rpcClientConfig;
 
-    /**
-     * RPC服务器连接配置
-     */
-    private static String SERVER_HOST;
-    private static int SERVER_PORT;
-
-    @Value("${wlb.rpc.server.host:127.0.0.1}")
-    private void setServerHost(String serverHost) {
-        this.SERVER_HOST = serverHost;
-    }
-
-    @Value("${wlb.rpc.server.port:11211}")
-    private void setPortHost(int serverPort) {
-        this.SERVER_PORT = serverPort;
-    }
-
-    /**
-     * 客户端配置
-     */
-    public static final String SERVICE_ID = UniqueIdUtil.getUUID();
-    public static final String SERVICE_IP = LocalUtil.getLocalIp();
-
-    public static String SERVICE_NAME;
-    private static int INIT_RETRY_TIME;
-    private static boolean AWAYS_RETRY;
-    private static int AWAYS_RETRY_INTERVAL;
-
-
-    @Value("${wlb.rpc.client.servicename:client}")
-    private void setServiceName(String serviceName) {
-        this.SERVICE_NAME = serviceName;
-    }
-
-    @Value("${wlb.rpc.client.init-retry-time:5}")
-    private void setInitRetryTime(int initRetryTime) {
-        this.INIT_RETRY_TIME = initRetryTime;
-    }
-
-    @Value("${wlb.rpc.client.aways-retry:true}")
-    private void setAwaysRetry(boolean awaysRetry) {
-        this.AWAYS_RETRY = awaysRetry;
-    }
-
-    @Value("${wlb.rpc.client.aways-retry-interval:60}")
-    private void setAwaysRetryInterval(int awaysRetryInterval) {
-        this.AWAYS_RETRY_INTERVAL = awaysRetryInterval;
-    }
+    private static final String SERVICE_ID = UniqueIdUtil.getUUID();
+    private static final String SERVICE_IP = LocalUtil.getLocalIp();
+    public static final Service SERVICE = new Service(SERVICE_ID, "", "", SERVICE_IP);
 
 
     /**
      * 启动RPC客户端
      */
     @PostConstruct
-    public synchronized static void start() {
+    public synchronized void start() {
         if (STATUS != 1) {
             log.info("RPC客户端不处于未启动状态");
             return;
@@ -124,7 +87,7 @@ public class RpcClientStarter {
                     }
                 });
 
-        connect(bootstrap, SERVER_HOST, SERVER_PORT, INIT_RETRY_TIME);
+        connect(bootstrap, rpcServerConfig.getHost(), rpcServerConfig.getPort(), rpcClientConfig.getInitRetryTime());
     }
 
 
@@ -143,22 +106,24 @@ public class RpcClientStarter {
      * @param port
      * @param retry
      */
-    private static void connect(Bootstrap bootstrap, String host, int port, int retry) {
+    private void connect(Bootstrap bootstrap, String host, int port, int retry) {
         bootstrap.connect(host, port).addListener(future -> {
             if (future.isSuccess()) {
                 STATUS = 3;
                 log.info("RPC服务器连接成功");
                 RpcClientStarter.channel = ((ChannelFuture) future).channel();
-                channel.writeAndFlush(new RegisterServerRequestPacket(RpcClientConfig.SERVICE));
+                SERVICE.setServiceName(RpcClientConfig.getServiceName());
+                log.error(SERVICE.toString());
+                channel.writeAndFlush(new RegisterServerRequestPacket(SERVICE));
             } else if (retry == 0) {
-                log.info(AWAYS_RETRY_INTERVAL + "秒后尝试重连RPC服务器");
-                if (!AWAYS_RETRY) {
+                log.info(rpcClientConfig.getAwaysRetryInterval() + "秒后尝试重连RPC服务器");
+                if (!rpcClientConfig.getAwaysRetry()) {
                     return;
                 }
-                bootstrap.config().group().schedule(() -> connect(bootstrap, host, port, 0), AWAYS_RETRY_INTERVAL, TimeUnit.SECONDS);
+                bootstrap.config().group().schedule(() -> connect(bootstrap, host, port, 0), rpcClientConfig.getAwaysRetryInterval(), TimeUnit.SECONDS);
             } else {
                 // 第几次重连
-                int order = (INIT_RETRY_TIME - retry) + 1;
+                int order = (rpcClientConfig.getInitRetryTime() - retry) + 1;
                 // 本次重连的间隔
                 int delay = 1 << order;
                 log.info(new Date() + ": 连接失败，第" + order + "次重连……");
