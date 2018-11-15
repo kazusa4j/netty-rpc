@@ -1,7 +1,7 @@
 package com.wlb.forever.rpc.common.protocol.response;
 
 import com.wlb.forever.rpc.common.entity.RpcResponseInfo;
-import com.wlb.forever.rpc.common.protocol.Packet;
+import com.wlb.forever.rpc.common.protocol.AbstractPacket;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,7 +16,7 @@ import static com.wlb.forever.rpc.common.protocol.command.Command.CONSUMER_SERVI
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class ConsumerServiceResponsePacket extends Packet {
+public class ConsumerServiceResponsePacket extends AbstractPacket {
     private RpcResponseInfo rpcResponseInfo;
 
     @Override

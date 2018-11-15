@@ -3,7 +3,7 @@ package com.wlb.forever.rpc.server.executor;
 import com.wlb.forever.rpc.common.entity.RpcRequestInfo;
 import com.wlb.forever.rpc.common.entity.RpcResponseInfo;
 import com.wlb.forever.rpc.common.entity.Service;
-import com.wlb.forever.rpc.common.protocol.Packet;
+import com.wlb.forever.rpc.common.protocol.AbstractPacket;
 import com.wlb.forever.rpc.common.protocol.request.ConsumerServiceRequestPacket;
 import com.wlb.forever.rpc.common.protocol.request.ProducerServiceRequestPacket;
 import com.wlb.forever.rpc.common.protocol.response.ConsumerServiceResponsePacket;
@@ -41,8 +41,8 @@ public class ConsumerRequestExecutor {
     private ServerExecuteModeFactory serverExecuteModeFactory;
 
     @Async(value = "threadPoolClientRequest")
-    public void executeTask(ChannelHandlerContext ch, Packet packet) {
-        ConsumerServiceRequestPacket consumerServiceRequestPacket = (ConsumerServiceRequestPacket) packet;
+    public void executeTask(ChannelHandlerContext ch, AbstractPacket abstractPacket) {
+        ConsumerServiceRequestPacket consumerServiceRequestPacket = (ConsumerServiceRequestPacket) abstractPacket;
         List<Service> producerServices = ServiceUtil.getChannelsServiceId(consumerServiceRequestPacket.getRpcRequestInfo().getProducerServiceName());
         if (producerServices == null || producerServices.size() <= 0) {
             log.warn("RPC服务({})不存在", consumerServiceRequestPacket.getRpcRequestInfo().getProducerServiceName());

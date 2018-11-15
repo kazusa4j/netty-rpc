@@ -8,7 +8,16 @@ import java.util.List;
  * @Description:
  */
 public interface BalanceArithmeticFactory {
+    /**
+     *
+     * @param arithmeticName
+     * @return
+     */
     BalanceArithmetic getArithmetic(String arithmeticName);
 
+    /**
+     *
+     * @return
+     */
     List<BalanceArithmetic> getArithmetics();
 }

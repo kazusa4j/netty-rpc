@@ -2,7 +2,7 @@ package com.wlb.forever.rpc.server.executor;
 
 import com.wlb.forever.rpc.common.entity.RpcResponseInfo;
 import com.wlb.forever.rpc.common.entity.Service;
-import com.wlb.forever.rpc.common.protocol.Packet;
+import com.wlb.forever.rpc.common.protocol.AbstractPacket;
 import com.wlb.forever.rpc.common.protocol.response.ConsumerServiceResponsePacket;
 import com.wlb.forever.rpc.common.protocol.response.ProducerServiceResponsePacket;
 import com.wlb.forever.rpc.server.executor.mode.ServerRpcExecuteMode;
@@ -31,8 +31,8 @@ public class ProducerResponseExecutor {
     private ExecuteModeCache executeModeCache;
 
     @Async(value = "threadPoolServerResponse")
-    public void executeTask(ChannelHandlerContext ch, Packet packet) {
-        ProducerServiceResponsePacket producerServiceResponsePacket = (ProducerServiceResponsePacket) packet;
+    public void executeTask(ChannelHandlerContext ch, AbstractPacket abstractPacket) {
+        ProducerServiceResponsePacket producerServiceResponsePacket = (ProducerServiceResponsePacket) abstractPacket;
         try {
             ConsumerServiceResponsePacket consumerServiceResponsePacket = new ConsumerServiceResponsePacket();
             consumerServiceResponsePacket.setRpcResponseInfo(producerServiceResponsePacket.getRpcResponseInfo());

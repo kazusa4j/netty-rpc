@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
 public class RpcClientConfigure {
     @Bean
     @ConditionalOnBean(RpcClientStarter.class)
-    public PropertyPlaceholderConfigurer getPropertyPlaceholderConfigurer() {
+    public static PropertyPlaceholderConfigurer getPropertyPlaceholderConfigurer() {
         return new CustomPropertyPlaceholderConfigurer();
     }
 }

@@ -17,6 +17,6 @@ public class RpcCommonConfig {
 
     @Value("${wlb.rpc.common.encode:JSON}")
     private void setEncode(String encode) {
-        this.ENCODE = encode;
+        ENCODE = encode;
     }
 }

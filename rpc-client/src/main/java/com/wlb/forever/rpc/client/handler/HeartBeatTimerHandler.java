@@ -22,7 +22,6 @@ public class HeartBeatTimerHandler extends ChannelInboundHandlerAdapter {
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         ctx.executor().scheduleAtFixedRate(() -> {
             ctx.writeAndFlush(new HeartBeatRequestPacket());
-            //log.info("客户端发送心跳:" + System.currentTimeMillis());
         }, HEARTBEAT_INTERVAL, HEARTBEAT_INTERVAL, TimeUnit.SECONDS);
 
         super.channelActive(ctx);

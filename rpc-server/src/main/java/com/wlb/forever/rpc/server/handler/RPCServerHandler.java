@@ -1,6 +1,6 @@
 package com.wlb.forever.rpc.server.handler;
 
-import com.wlb.forever.rpc.common.protocol.Packet;
+import com.wlb.forever.rpc.common.protocol.AbstractPacket;
 import com.wlb.forever.rpc.common.utils.ServiceUtil;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
@@ -19,10 +19,10 @@ import static com.wlb.forever.rpc.common.protocol.command.Command.REGISTER_SERVE
  * @Description: RPC服务器业务HANDLER
  */
 @ChannelHandler.Sharable
-public class RPCServerHandler extends SimpleChannelInboundHandler<Packet> {
+public class RPCServerHandler extends SimpleChannelInboundHandler<AbstractPacket> {
     public static final RPCServerHandler INSTANCE = new RPCServerHandler();
 
-    private Map<Byte, SimpleChannelInboundHandler<? extends Packet>> handlerMap;
+    private Map<Byte, SimpleChannelInboundHandler<? extends AbstractPacket>> handlerMap;
 
     private RPCServerHandler() {
         handlerMap = new HashMap<>();
@@ -32,9 +32,9 @@ public class RPCServerHandler extends SimpleChannelInboundHandler<Packet> {
     }
 
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, Packet packet) throws Exception {
-        if (handlerMap.containsKey(packet.getCommand())) {
-            handlerMap.get(packet.getCommand()).channelRead(ctx, packet);
+    protected void channelRead0(ChannelHandlerContext ctx, AbstractPacket abstractPacket) throws Exception {
+        if (handlerMap.containsKey(abstractPacket.getCommand())) {
+            handlerMap.get(abstractPacket.getCommand()).channelRead(ctx, abstractPacket);
         }
     }
 

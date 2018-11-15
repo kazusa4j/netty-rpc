@@ -2,7 +2,7 @@ package com.wlb.forever.rpc.common.protocol.request;
 
 
 import com.wlb.forever.rpc.common.entity.Service;
-import com.wlb.forever.rpc.common.protocol.Packet;
+import com.wlb.forever.rpc.common.protocol.AbstractPacket;
 import lombok.*;
 
 import static com.wlb.forever.rpc.common.protocol.command.Command.REGISTER_SERVER_REQUEST;
@@ -16,7 +16,7 @@ import static com.wlb.forever.rpc.common.protocol.command.Command.REGISTER_SERVE
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RegisterServerRequestPacket extends Packet {
+public class RegisterServerRequestPacket extends AbstractPacket {
     private Service service;
 
     @Override

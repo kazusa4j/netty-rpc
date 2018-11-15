@@ -25,7 +25,6 @@ public class UnPacketHandler extends LengthFieldBasedFrameDecoder {
         if (in.getInt(0) != PacketCodec.MAGIC_NUMBER) {
 
             log.info("请求包与协议不匹配!");
-            //ctx.channel().close();
             return null;
         }
 

@@ -2,7 +2,6 @@ package com.wlb.forever.rpc.client.wrapper;
 
 import com.wlb.forever.rpc.client.RpcClientStarter;
 import com.wlb.forever.rpc.client.call.RpcCaller;
-import com.wlb.forever.rpc.client.config.RpcClientConfig;
 import com.wlb.forever.rpc.common.entity.RpcRequestInfo;
 import com.wlb.forever.rpc.common.protocol.request.ConsumerServiceRequestPacket;
 import com.wlb.forever.rpc.common.utils.RpcSerializerUtil;

@@ -28,9 +28,9 @@ import static com.wlb.forever.rpc.common.protocol.command.Command.*;
 public class PacketCodec {
     public static final int MAGIC_NUMBER = 0x11910898;
     public static final PacketCodec INSTANCE = new PacketCodec();
-    private Serializer DEFAULT_SERIALIZER = getDefaultSerializer();
+    private Serializer defaultSerializer = getDefaultSerializer();
 
-    private final Map<Byte, Class<? extends Packet>> packetTypeMap;
+    private final Map<Byte, Class<? extends AbstractPacket>> packetTypeMap;
     private final Map<Byte, Serializer> serializerMap;
 
 
@@ -51,21 +51,21 @@ public class PacketCodec {
         serializerMap.put(hessianSerilizer.getSerializerAlgorithm(), hessianSerilizer);
     }
 
-    public void encode(ByteBuf byteBuf, Packet packet) {
+    public void encode(ByteBuf byteBuf, AbstractPacket abstractPacket) {
         // 1. 序列化 java 对象
-        byte[] bytes = DEFAULT_SERIALIZER.serialize(packet);
+        byte[] bytes = defaultSerializer.serialize(abstractPacket);
 
         // 2. 实际编码过程
         byteBuf.writeInt(MAGIC_NUMBER);
-        byteBuf.writeByte(packet.getVersion());
-        byteBuf.writeByte(DEFAULT_SERIALIZER.getSerializerAlgorithm());
-        byteBuf.writeByte(packet.getCommand());
+        byteBuf.writeByte(abstractPacket.getVersion());
+        byteBuf.writeByte(defaultSerializer.getSerializerAlgorithm());
+        byteBuf.writeByte(abstractPacket.getCommand());
         byteBuf.writeInt(bytes.length);
         byteBuf.writeBytes(bytes);
     }
 
 
-    public Packet decode(ByteBuf byteBuf) {
+    public AbstractPacket decode(ByteBuf byteBuf) {
         // 跳过 magic number
         byteBuf.skipBytes(4);
 
@@ -84,7 +84,7 @@ public class PacketCodec {
         byte[] bytes = new byte[length];
         byteBuf.readBytes(bytes);
 
-        Class<? extends Packet> requestType = getRequestType(command);
+        Class<? extends AbstractPacket> requestType = getRequestType(command);
         Serializer serializer = getSerializer(serializeAlgorithm);
 
         if (requestType != null && serializer != null) {
@@ -99,7 +99,7 @@ public class PacketCodec {
         return serializerMap.get(serializeAlgorithm);
     }
 
-    private Class<? extends Packet> getRequestType(byte command) {
+    private Class<? extends AbstractPacket> getRequestType(byte command) {
 
         return packetTypeMap.get(command);
     }

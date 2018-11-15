@@ -1,6 +1,6 @@
 package com.wlb.forever.rpc.common.handler;
 
-import com.wlb.forever.rpc.common.protocol.Packet;
+import com.wlb.forever.rpc.common.protocol.AbstractPacket;
 import com.wlb.forever.rpc.common.protocol.PacketCodec;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandler;
@@ -15,7 +15,7 @@ import java.util.List;
  * @Description:编解码包HANDLER
  */
 @ChannelHandler.Sharable
-public class PacketCodecHandler extends MessageToMessageCodec<ByteBuf, Packet> {
+public class PacketCodecHandler extends MessageToMessageCodec<ByteBuf, AbstractPacket> {
     public static final PacketCodecHandler INSTANCE = new PacketCodecHandler();
 
     private PacketCodecHandler() {
@@ -36,13 +36,13 @@ public class PacketCodecHandler extends MessageToMessageCodec<ByteBuf, Packet> {
     /**
      * 编码
      * @param ctx
-     * @param packet
+     * @param abstractPacket
      * @param out
      */
     @Override
-    protected void encode(ChannelHandlerContext ctx, Packet packet, List<Object> out) {
+    protected void encode(ChannelHandlerContext ctx, AbstractPacket abstractPacket, List<Object> out) {
         ByteBuf byteBuf = ctx.channel().alloc().ioBuffer();
-        PacketCodec.INSTANCE.encode(byteBuf, packet);
+        PacketCodec.INSTANCE.encode(byteBuf, abstractPacket);
         out.add(byteBuf);
     }
 }

@@ -27,6 +27,7 @@ public class CustomPropertyPlaceholderConfigurer extends PropertyPlaceholderConf
         Properties result = new Properties();
         // 加载父类的配置
         Properties mergeProperties = super.mergeProperties();
+       log.error("mergeProperties长度:{}",mergeProperties.size());
         result.putAll(mergeProperties);
         Map<String, String> configs = loadConfigs();
         result.putAll(configs);
@@ -51,7 +52,8 @@ public class CustomPropertyPlaceholderConfigurer extends PropertyPlaceholderConf
 
     private Map<String, String> loadConfigs() {
         Map<String, String> map = new HashMap<>();
-        while (true) {
+        log.error("加载配置中心配置");
+       /* while (true) {
             RpcClientStarter rpcClientStarter = SpringBeanUtil.getBean(RpcClientStarter.class);
             rpcClientStarter.start();
             if (RpcClientStarter.channel != null && RpcClientStarter.channel.isActive()) {
@@ -64,7 +66,7 @@ public class CustomPropertyPlaceholderConfigurer extends PropertyPlaceholderConf
                     log.error(e.getMessage());
                 }
             }
-        }
+        }*/
         map.put("logging.level", "warn");
         return map;
     }

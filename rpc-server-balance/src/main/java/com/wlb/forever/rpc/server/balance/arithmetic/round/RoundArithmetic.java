@@ -57,23 +57,24 @@ public class RoundArithmetic implements BalanceArithmetic {
                     }
                 }
             }
-            synchronized (roundMap) {
-                if (!hasGetMap) {
-                    map = new LinkedHashMap<>(16, 0.75f, true);
-                    for (Service service : producerServices) {
-                        map.put(service, 0);
-                    }
-                    list.add(map);
-                }
-            }
-        } else {
-            synchronized (roundMap) {
-                list = new ArrayList<>();
+
+            if (!hasGetMap) {
                 map = new LinkedHashMap<>(16, 0.75f, true);
                 for (Service service : producerServices) {
                     map.put(service, 0);
                 }
-                list.add(map);
+                synchronized (roundMap) {
+                    list.add(map);
+                }
+            }
+        } else {
+            list = new ArrayList<>();
+            map = new LinkedHashMap<>(16, 0.75f, true);
+            for (Service service : producerServices) {
+                map.put(service, 0);
+            }
+            list.add(map);
+            synchronized (roundMap) {
                 roundMap.put(serviceName, list);
             }
         }
@@ -92,6 +93,7 @@ public class RoundArithmetic implements BalanceArithmetic {
             for (Service service : map.keySet()) {
                 map.get(service);
                 list.add(service);
+                log.info(service.getServiceId());
                 return list;
             }
         }

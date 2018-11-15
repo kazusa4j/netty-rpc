@@ -19,13 +19,12 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
@@ -38,8 +37,10 @@ import java.util.concurrent.TimeUnit;
 @Component
 @Slf4j
 public class RpcClientStarter {
-
-    public static volatile int STATUS = 1;//1:未连接；2:连接中;3:已连接
+    /**
+     * 1:未连接；2:连接中;3:已连接;4:关闭连接
+     */
+    public static volatile int STATUS = 1;
     private static NioEventLoopGroup workerGroup;
     private static Bootstrap bootstrap;
     public static Channel channel;
@@ -90,9 +91,13 @@ public class RpcClientStarter {
         connect(bootstrap, rpcServerConfig.getHost(), rpcServerConfig.getPort(), rpcClientConfig.getInitRetryTime());
     }
 
-
+    /**
+     *关闭 Netty Client
+     */
+    @PreDestroy
     public static void destroy() {
         if (workerGroup != null) {
+            STATUS=4;
             workerGroup.shutdownGracefully().syncUninterruptibly();
             log.info("关闭 Netty Client");
         }

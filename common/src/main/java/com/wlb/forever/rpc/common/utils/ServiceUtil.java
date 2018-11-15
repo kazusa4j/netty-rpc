@@ -15,7 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Slf4j
 public class ServiceUtil {
-    private static final Map<String, Map<Service, Channel>> serviceMap = new ConcurrentHashMap<>();
+    private static final Map<String, Map<Service, Channel>> SERVICE_MAP = new ConcurrentHashMap<>();
 
     /**
      * 注册服务
@@ -24,13 +24,13 @@ public class ServiceUtil {
      * @param channel
      */
     public static void bindService(Service service, Channel channel) {
-        if (serviceMap.containsKey(service.getServiceName())) {
-            serviceMap.get(service.getServiceName()).put(service, channel);
+        if (SERVICE_MAP.containsKey(service.getServiceName())) {
+            SERVICE_MAP.get(service.getServiceName()).put(service, channel);
         } else {
-            synchronized (serviceMap) {
+            synchronized (SERVICE_MAP) {
                 Map<Service, Channel> map = new LinkedHashMap<>();
                 map.put(service, channel);
-                serviceMap.put(service.getServiceName(), map);
+                SERVICE_MAP.put(service.getServiceName(), map);
             }
         }
         log.info("开始注册服务:" + service.getServiceName());
@@ -46,7 +46,7 @@ public class ServiceUtil {
     public static void unBindService(Channel channel) {
         Service service = getService(channel);
         if (service != null) {
-            serviceMap.get(service.getServiceName()).remove(service);
+            SERVICE_MAP.get(service.getServiceName()).remove(service);
             channel.attr(Attributes.SERVICE).set(null);
             log.info(service.getServiceName() + " 服务注销!");
         }
@@ -75,8 +75,8 @@ public class ServiceUtil {
      */
     public static Channel getChannel(Service service, String serviceName) {
 
-        if (serviceMap.containsKey(serviceName)) {
-            return serviceMap.get(serviceName).get(service);
+        if (SERVICE_MAP.containsKey(serviceName)) {
+            return SERVICE_MAP.get(serviceName).get(service);
         } else {
             return null;
         }
@@ -90,8 +90,8 @@ public class ServiceUtil {
      */
     public static List<Channel> getChannels(String serviceName) {
 
-        if (serviceMap.containsKey(serviceName)) {
-            return new ArrayList<>(serviceMap.get(serviceName).values());
+        if (SERVICE_MAP.containsKey(serviceName)) {
+            return new ArrayList<>(SERVICE_MAP.get(serviceName).values());
         } else {
             return null;
         }
@@ -104,8 +104,8 @@ public class ServiceUtil {
      * @return
      */
     public static List<Service> getChannelsServiceId(String serviceName) {
-        if (serviceMap.containsKey(serviceName)) {
-            return new ArrayList<>(serviceMap.get(serviceName).keySet());
+        if (SERVICE_MAP.containsKey(serviceName)) {
+            return new ArrayList<>(SERVICE_MAP.get(serviceName).keySet());
         } else {
             return null;
         }
@@ -132,9 +132,9 @@ public class ServiceUtil {
      * @return
      */
     public static Service getService(String serviceName) {
-        if (serviceMap.containsKey(serviceName)) {
-            if (!serviceMap.get(serviceName).isEmpty()) {
-                for (Service service : serviceMap.get(serviceName).keySet()) {
+        if (SERVICE_MAP.containsKey(serviceName)) {
+            if (!SERVICE_MAP.get(serviceName).isEmpty()) {
+                for (Service service : SERVICE_MAP.get(serviceName).keySet()) {
                     return service;
                 }
             }

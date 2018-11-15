@@ -10,5 +10,11 @@ import java.util.List;
  * @Description:
  */
 public interface BalanceArithmetic {
+    /**
+     * 过滤生产者
+     * @param consumerService
+     * @param producerServices
+     * @return
+     */
     List<Service> filterProducerServices(Service consumerService, List<Service> producerServices);
 }
