@@ -15,7 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Slf4j
 public class RpcBeanUtil {
-    private static final Map<String, Object> rpcBeanMap = new ConcurrentHashMap<>();
+    private static final Map<String, Object> RPC_BEAN_MAP = new ConcurrentHashMap<>();
 
     /**
      * 根据beanName判断RPC调用bean缓存map中是否存在
@@ -24,16 +24,16 @@ public class RpcBeanUtil {
      * @return
      */
     public static boolean hasBean(String beanName) {
-        return rpcBeanMap.containsKey(beanName);
+        return RPC_BEAN_MAP.containsKey(beanName);
     }
 
     public static void putBean(String beanName, Object bean) {
-        rpcBeanMap.put(beanName, bean);
+        RPC_BEAN_MAP.put(beanName, bean);
     }
 
     public static Object getBean(String beanName) {
         if (hasBean(beanName)) {
-            return rpcBeanMap.get(beanName);
+            return RPC_BEAN_MAP.get(beanName);
         }
         return null;
     }

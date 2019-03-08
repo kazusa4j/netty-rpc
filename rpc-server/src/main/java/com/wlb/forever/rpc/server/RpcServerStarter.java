@@ -43,6 +43,7 @@ public class RpcServerStarter {
                 .childOption(ChannelOption.SO_KEEPALIVE, true)
                 .childOption(ChannelOption.TCP_NODELAY, true)
                 .childHandler(new ChannelInitializer<NioSocketChannel>() {
+                    @Override
                     protected void initChannel(NioSocketChannel ch) {
                         //心跳
                         ch.pipeline().addLast(new RPCIdleStateHandler());

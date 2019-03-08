@@ -2,6 +2,7 @@ package com.wlb.forever.rpc.client.business.controller;
 
 import com.wlb.forever.rpc.client.business.entity.User;
 import com.wlb.forever.rpc.client.business.service.RpcTest2Service;
+import com.wlb.forever.rpc.client.business.service.UserHttpService;
 import com.wlb.forever.rpc.client.business.service.UserService;
 import com.wlb.forever.rpc.common.entity.JsonResult;
 import io.swagger.annotations.ApiOperation;
@@ -27,6 +28,9 @@ public class TestRpcController {
     private UserService userService;
 
     @Autowired
+    private UserHttpService userHttpService;
+
+    @Autowired
     private RpcTest2Service rpcTest2Service;
 
     @ApiOperation("获取用户")
@@ -35,6 +39,22 @@ public class TestRpcController {
         JsonResult jr = new JsonResult();
         try {
             User user = userService.getUser();
+            jr.setResult(user);
+            return ResponseEntity.ok(jr);
+        } catch (Exception e) {
+            e.printStackTrace();
+            jr.setStatus(-1);
+            jr.setDesc("出现异常");
+            return ResponseEntity.ok(jr);
+        }
+    }
+
+    @ApiOperation("获取用户")
+    @RequestMapping(value = "/testhttp", method = {RequestMethod.POST, RequestMethod.GET})
+    public ResponseEntity<JsonResult> testhttp() {
+        JsonResult jr = new JsonResult();
+        try {
+            User user = userHttpService.getUser();
             jr.setResult(user);
             return ResponseEntity.ok(jr);
         } catch (Exception e) {

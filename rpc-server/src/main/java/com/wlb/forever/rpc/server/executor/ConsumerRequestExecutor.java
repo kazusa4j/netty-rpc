@@ -31,8 +31,11 @@ import static com.wlb.forever.rpc.common.constant.RpcResponseCode.SERVER_EXCEPTI
 @Component
 @Slf4j
 public class ConsumerRequestExecutor {
+    /**
+     * 变量名称为定义的线程池bean定义的name属性名。
+     */
     @Autowired
-    private ThreadPoolTaskExecutor threadPoolClientRequest;//变量名称为定义的线程池bean定义的name属性名。
+    private ThreadPoolTaskExecutor threadPoolClientRequest;
 
     @Autowired
     private ExecuteModeCache executeModeCache;
@@ -63,8 +66,7 @@ public class ConsumerRequestExecutor {
                 ServerRpcExecuteMode serverRpcExecuteMode = serverExecuteModeFactory.getExecuteMode(ServiceUtil.getService(ch.channel()), producerServices);
                 serverRpcExecuteMode.requestProducer(producerServiceRequestPacket);
                 executeModeCache.put(producerServiceRequestPacket.getRpcRequestInfo().getRequestId(), serverRpcExecuteMode);
-            }catch (Exception e){
-                e.printStackTrace();
+            } catch (Exception e) {
                 log.warn("({})RPC调用处理消费者请求发生异常", consumerServiceRequestPacket.getRpcRequestInfo().getConsumerService().getServiceName());
                 ConsumerServiceResponsePacket consumerServiceResponsePacket = new ConsumerServiceResponsePacket();
                 RpcResponseInfo rpcResponseInfo = new RpcResponseInfo();

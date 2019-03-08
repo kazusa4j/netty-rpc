@@ -5,7 +5,7 @@ import com.wlb.forever.rpc.client.annotation.RpcClient;
 import com.wlb.forever.rpc.client.business.entity.User;
 
 /**
- * @Auther: william
+ * @author: william
  * @Date: 18/10/18 10:50
  * @Description:
  */

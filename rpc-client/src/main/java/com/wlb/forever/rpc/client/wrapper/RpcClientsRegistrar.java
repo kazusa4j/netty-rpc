@@ -150,12 +150,12 @@ public class RpcClientsRegistrar implements ImportBeanDefinitionRegistrar,
         }
         boolean loadCompleted = false;
         try {
-            this.knownRpcClients.put(type, new RpcProxyFactory(serviceName, beanName, type));
+            knownRpcClients.put(type, new RpcProxyFactory(serviceName, beanName, type));
             log.info(String.valueOf(type));
             loadCompleted = true;
         } finally {
             if (!loadCompleted) {
-                this.knownRpcClients.remove(type);
+                knownRpcClients.remove(type);
             }
         }
     }

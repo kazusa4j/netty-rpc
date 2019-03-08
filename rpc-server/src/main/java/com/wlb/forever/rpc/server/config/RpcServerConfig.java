@@ -17,7 +17,7 @@ public class RpcServerConfig {
 
     @Value("${wlb.rpc.server.execute.enable:true}")
     private void setBalanceEnable(boolean balanceEnable) {
-        this.BALANCE_ENABLE = balanceEnable;
+        BALANCE_ENABLE = balanceEnable;
     }
 
 
@@ -29,6 +29,6 @@ public class RpcServerConfig {
 
     @Value("${wlb.rpc.server.execute.mode:NULL}")
     private void setBalanceMode(String balanceMode) {
-        this.BALANCE_MODE = balanceMode;
+        BALANCE_MODE = balanceMode;
     }
 }

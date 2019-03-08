@@ -1,7 +1,5 @@
 package com.wlb.forever.rpc.client.config;
 
-import com.wlb.forever.rpc.client.RpcClientStarter;
-import com.wlb.forever.rpc.common.utils.SpringBeanUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
@@ -70,4 +68,6 @@ public class CustomPropertyPlaceholderConfigurer extends PropertyPlaceholderConf
         map.put("logging.level", "warn");
         return map;
     }
+
+
 }

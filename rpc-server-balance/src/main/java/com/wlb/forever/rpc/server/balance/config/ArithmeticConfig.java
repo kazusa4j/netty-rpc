@@ -14,6 +14,6 @@ public class ArithmeticConfig {
 
     @Value("${wlb.rpc.server.balance.arithmetic:RANDOM}")
     private void setBalanceArithmetic(String balanceArithmetic) {
-        this.BALANCE_ARITHMETIC = balanceArithmetic;
+        BALANCE_ARITHMETIC = balanceArithmetic;
     }
 }

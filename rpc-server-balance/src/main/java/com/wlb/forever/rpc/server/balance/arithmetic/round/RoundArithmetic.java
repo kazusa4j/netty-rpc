@@ -1,9 +1,7 @@
 package com.wlb.forever.rpc.server.balance.arithmetic.round;
 
-import com.wlb.forever.rpc.common.entity.Service;
 import com.wlb.forever.rpc.common.balance.BalanceArithmetic;
-import com.wlb.forever.rpc.server.balance.arithmetic.random.RandomArithmetic;
-import io.netty.channel.Channel;
+import com.wlb.forever.rpc.common.entity.Service;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -19,7 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Slf4j
 public class RoundArithmetic implements BalanceArithmetic {
-    private static final Map<String, List<Map<Service, Integer>>> roundMap = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<String, List<Map<Service, Integer>>> ROUND_MAP = new ConcurrentHashMap<>();
 
     private RoundArithmetic() {
 
@@ -39,8 +37,8 @@ public class RoundArithmetic implements BalanceArithmetic {
         String serviceName = producerServices.get(0).getServiceName();
         List<Map<Service, Integer>> list;
         Map<Service, Integer> map = null;
-        if (roundMap.containsKey(serviceName)) {
-            list = roundMap.get(serviceName);
+        if (ROUND_MAP.containsKey(serviceName)) {
+            list = ROUND_MAP.get(serviceName);
             boolean hasGetMap = false;
             for (Map<Service, Integer> mapTmp : list) {
                 if (mapTmp.size() == producerServices.size()) {
@@ -63,7 +61,7 @@ public class RoundArithmetic implements BalanceArithmetic {
                 for (Service service : producerServices) {
                     map.put(service, 0);
                 }
-                synchronized (roundMap) {
+                synchronized (ROUND_MAP) {
                     list.add(map);
                 }
             }
@@ -74,8 +72,8 @@ public class RoundArithmetic implements BalanceArithmetic {
                 map.put(service, 0);
             }
             list.add(map);
-            synchronized (roundMap) {
-                roundMap.put(serviceName, list);
+            synchronized (ROUND_MAP) {
+                ROUND_MAP.put(serviceName, list);
             }
         }
         return getService(map);

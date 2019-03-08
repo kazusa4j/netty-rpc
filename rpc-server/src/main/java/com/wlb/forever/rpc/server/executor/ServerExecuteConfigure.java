@@ -1,13 +1,11 @@
 package com.wlb.forever.rpc.server.executor;
 
-import com.wlb.forever.rpc.common.balance.BalanceArithmeticFactory;
 import com.wlb.forever.rpc.server.executor.factory.CustomServerExecuteModeFactory;
 import com.wlb.forever.rpc.server.executor.factory.ServerExecuteModeFactory;
 import com.wlb.forever.rpc.server.executor.cache.ExecuteModeCache;
 import com.wlb.forever.rpc.server.executor.cache.JDKExecuteModeCache;
 import com.wlb.forever.rpc.server.executor.cache.RedisExecuteModeCache;
 import com.wlb.forever.rpc.server.executor.factory.DefaultServerExecuteModeFactory;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -30,7 +28,6 @@ public class ServerExecuteConfigure {
 
     @Bean
     @ConditionalOnMissingBean(ServerExecuteModeFactory.class)
-   // @ConditionalOnBean(BalanceArithmeticFactory.class)
     @ConditionalOnProperty(name = "wlb.rpc.server.execute.factory", havingValue = "CUSTOM")
     public ServerExecuteModeFactory customExecuteModeFactory() {
         return new CustomServerExecuteModeFactory();

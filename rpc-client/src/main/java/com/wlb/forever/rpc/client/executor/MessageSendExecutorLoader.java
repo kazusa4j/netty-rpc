@@ -8,5 +8,5 @@ import com.wlb.forever.rpc.common.utils.SpringBeanUtil;
  * @Description:
  */
 public interface MessageSendExecutorLoader {
-    MessageSendExecutor messageSendExecutor = SpringBeanUtil.getBean(MessageSendExecutor.class);
+    MessageSendExecutor MESSAGE_SEND_EXECUTOR = SpringBeanUtil.getBean(MessageSendExecutor.class);
 }

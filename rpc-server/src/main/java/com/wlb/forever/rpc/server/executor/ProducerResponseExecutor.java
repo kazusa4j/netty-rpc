@@ -26,7 +26,7 @@ import static com.wlb.forever.rpc.common.constant.RpcResponseCode.SERVER_EXCEPTI
 @Slf4j
 public class ProducerResponseExecutor {
     @Autowired
-    private ThreadPoolTaskExecutor threadPoolServerResponse;//变量名称为定义的线程池bean定义的name属性名。
+    private ThreadPoolTaskExecutor threadPoolServerResponse;
     @Autowired
     private ExecuteModeCache executeModeCache;
 

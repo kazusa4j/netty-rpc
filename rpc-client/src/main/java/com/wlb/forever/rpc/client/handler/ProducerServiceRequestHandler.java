@@ -24,7 +24,7 @@ public class ProducerServiceRequestHandler extends SimpleChannelInboundHandler<P
 
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, ProducerServiceRequestPacket producerServiceRequestPacket) throws Exception {
-        MessageSendExecutor messageSendExecutor = MessageSendExecutorLoader.messageSendExecutor;
+        MessageSendExecutor messageSendExecutor = MessageSendExecutorLoader.MESSAGE_SEND_EXECUTOR;
         messageSendExecutor.send(producerServiceRequestPacket, channelHandlerContext);
     }
 }
